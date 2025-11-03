@@ -1,0 +1,581 @@
+/* Sandoll 웹폰트 */
+@import url('https://bks0c7yrb0.execute-api.ap-northeast-2.amazonaws.com/v1/api/css/drop_fontstream_css/?sid=gAAAAABkPXHo4qvpc1sn4CfuJL52Upc7AT8TVi8zpqX6aZtd3bQar6UDsPKea-00OVjtEVNfrYxuRy0KwyP7evvOGmFn-UJE3J2fgwZrrKxTO78AFSLAqGsk2yWcjZ17eIWeK8W_hEM0WwmzRDJ8PY0OKk9vf2d1gDahwuKJRCRKWS-LyUCxQDP7meUclfmM9WUoaP-N0gjIL5lyx-sFjuMGMGstTkeslXuA25WmkTdqzwQN4zkCffosmIAvef50EDHxTj2cl6OL');
+
+:root{
+  --ink:#ebfeb3;
+  --accent:#06aaba;
+  --bg:#3C6C71;
+  --offsetY:8vh;
+  --font-main: 'Sandoll SuPil', sans-serif;
+  --font-sub: 'Sandoll Gwanghwamun', serif;
+}
+
+/* 기본 리셋 */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;padding:0}
+body{
+  background:var(--bg);
+  font-family: var(--font-main);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  color:var(--ink);
+}
+
+/* 로고 */
+.logo-container{
+  position:fixed;
+  top:3.5vh; left:3.5vw;
+  width:clamp(8vw,14vw,18vw);
+  height:auto;
+  z-index:1400;
+  pointer-events:none;
+  user-select:none;
+}
+.logo-base,.logo-top{position:absolute;top:0;left:0;width:100%;height:auto;display:block}
+.logo-base{mix-blend-mode:multiply; z-index:1}
+.logo-top{mix-blend-mode:luminosity; z-index:2}
+
+/* header image */
+.header{position:fixed; top:0; left:50%; transform:translateX(-50%); z-index:1300; pointer-events:none;}
+.header-bg{ width: min(80vw, 100vw); height:auto; display:block; pointer-events:none; mix-blend-mode:luminosity; }
+
+/* stage / background */
+.stage{position:relative;width:100vw;height:100vh;}
+.bg{position:absolute; inset:0; background:url("asset/background.png") center/cover no-repeat fixed; z-index:0;}
+
+/* question moved slightly down */
+.question{position:fixed; left:5vw; top: calc(16.5vh + 4.6vw); z-index:1350; pointer-events:none; white-space:normal;}
+.q-1{display:block; font-weight:700; font-size:clamp(1.6vw,3.4vmin,3.2vw); font-family: var(--font-main); line-height:1; margin:0;} 
+.q-2{display:block; font-weight:300; font-size:clamp(1.2vw,2.6vmin,2.2vw); opacity:.95; margin-top:0.2rem; font-family: var(--font-sub); line-height:1;} 
+.question .q-1{ line-height:1; margin:0 !important; }
+.question .q-2{ display:block; line-height:1; margin-top:0.7rem !important; }
+.question br{ display:none; }
+
+/* 이전 버튼: 질문 컨테이너 하단 여백 크게, 크기 확대 */
+.question #btnBack,
+.question #btnBackInstrument{
+  position:absolute;
+  left:0;
+  top:135%;
+  width:6vw; /* 살짝 축소 */
+  height:auto;
+  z-index:1400;
+  pointer-events:auto;
+}
+
+@media (max-width:768px){
+  .question #btnBack,
+  .question #btnBackInstrument{
+    top:140%;
+    width:12vw; /* 살짝 축소 */
+  }
+}
+
+/* radial-container: user requested top:5% */
+.radial-container{
+  position:fixed;
+  left:0; top: 8%;
+  width:100vw; height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  z-index:500; pointer-events:auto; overflow:visible;
+}
+
+/* radial images - JS sets pixel sizes */
+.radial-img{
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  transform-origin:50% 50%;
+  pointer-events:none;
+  display:block;
+  max-width:none; max-height:none;
+}
+
+/* layer stacking */
+.radial-line   { z-index: 10; }
+.radial-plate  { z-index: 20; }
+.radial-inner  { z-index: 30; }
+.radial-center { z-index: 40; }
+
+/* hover images */
+.hover-img{
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  opacity:0; visibility:hidden;
+  transition:none;
+  z-index:1150;
+  display:block;
+  max-width:none; max-height:none;
+  object-fit:contain;
+}
+.hover-img.is-active{ opacity:1; visibility:visible }
+
+/* 사이드 설명 패널 */
+.side-hint{
+  position:fixed;
+  right:2vw; top:18vh;
+  width:min(24vw, 420px);
+  color:var(--ink);
+  z-index:1450;
+  pointer-events:none;
+  text-align:left;
+}
+.side-hint-title{
+  font-family: var(--font-main);
+  font-weight:700;
+  font-size:clamp(1.2vw,2.4vmin,1.8vw);
+  margin:0 0 0.4rem 0;
+}
+.side-hint-desc{
+  font-family: var(--font-sub);
+  font-weight:400;
+  font-size:clamp(0.9vw,1.8vmin,1.2vw);
+  opacity:.95;
+}
+
+/* 참조 원 영역 (점선 원 + 색 오버레이 + 포인터 점) */
+.ref-circle-wrap{
+  position:fixed; /* JS에서 정확한 left/top/size를 설정 */
+  z-index:10; /* 가장 낮게 (라디얼보다 아래), 필요 시 더 낮춰도 됨 */
+  pointer-events:none;
+  visibility:hidden; /* 기본은 숨김, 호버 시만 표시 */
+}
+.ref-circle-img{ position:absolute; inset:0; width:100%; height:auto; display:block; filter:none; opacity:1; }
+.ref-circle-overlay{ position:absolute; inset:0; width:100%; height:100%; border-radius:50%; opacity:0; mix-blend-mode:multiply; z-index:1; }
+.ref-circle-dot{
+  position:absolute;
+  width:1.4vw; height:1.4vw; min-width:10px; min-height:10px;
+  background:#EBFEB3; border-radius:50%;
+  box-shadow:0 0 10px rgba(235,254,179,0.5);
+  transform:translate(-50%,-50%);
+  opacity:0; z-index:2;
+  mix-blend-mode:multiply; /* 오버레이 효과 */
+}
+
+/* 원 내부 텍스트 */
+.ref-circle-text{
+  position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center;
+  padding:8% 18%; z-index:2; color:var(--ink);
+  max-width:100%; overflow:visible; /* 제목이 넘치더라도 표시되도록 */
+  /* JS에서 alignItems와 textAlign을 동적으로 설정 */
+}
+.ref-text-title{ 
+  font-family: var(--font-main); 
+  font-weight:700; 
+  font-size:clamp(1.0vw,2.2vmin,1.6vw); 
+  margin:0 0 0.6rem 0; 
+  letter-spacing:0.02em; 
+  white-space:nowrap; /* 제목은 줄넘김 하지 않음 */
+  overflow:visible; /* 컨테이너를 넘어도 전체 표시 */
+  width:max-content; /* 내용에 맞게 너비 자동 조정 */
+  max-width:none; /* 최대 너비 제한 없음 */
+}
+.ref-text-body{ 
+  font-family: var(--font-sub); 
+  font-weight:400; 
+  font-size:clamp(0.85vw,1.8vmin,1.1vw); 
+  line-height:1.35; 
+  white-space:pre-line; 
+  width:100%; 
+  max-width:100%; 
+  word-break:keep-all; /* 한국어 단어 단위로 줄바꿈 */
+  overflow-wrap:break-word; /* 긴 단어만 경계에서 자름 */
+}
+
+/* hover text overlays */
+.hover-text{
+  position:absolute;
+  pointer-events:none;
+  z-index:1160;
+  width:10vw;
+  height:8vw;
+  display:block;
+  /* 위치는 JavaScript에서 동적으로 설정 */
+  /* 자연스러운 줄바꿈을 위한 설정 */
+  overflow:hidden;
+}
+
+.hover-text-content{
+  color:black;
+  font-family: var(--font-sub);
+  font-size:clamp(0.5vw,0.8vmin,0.7vw);
+  line-height:1.1;
+  text-align:left;
+  text-shadow:0 0.2vw 0.6vw rgba(255,255,255,0.7);
+  max-width:100%;
+  word-wrap:break-word;
+  overflow-wrap:break-word;
+  hyphens:auto;
+  white-space:normal;
+  overflow:visible;
+  display:block;
+  padding:0.5vw;
+  box-sizing:border-box;
+  width:100%;
+  height:100%;
+  /* 배경 박스 제거 */
+}
+
+.hover-text-content p{
+  margin:0 0 0.15vw 0;
+  font-weight:400;
+  max-width:100%;
+  word-wrap:break-word;
+  overflow-wrap:break-word;
+  text-align:left;
+  display:block;
+}
+
+.hover-text-content p:first-child{
+  font-weight:600;
+  font-size:clamp(0.6vw,1.0vmin,0.8vw);
+  margin-bottom:0.2vw;
+}
+
+/* 부채꼴 영역에 맞춘 텍스트 정렬 */
+.hover-text-content p:last-child{
+  margin-bottom:0;
+}
+
+/* overlay (SVG hitmap) */
+.overlay{
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  z-index:100;
+  pointer-events:auto;
+  width:auto; height:auto;
+}
+
+/* hit paths */
+.hit{ fill: transparent; cursor:pointer; pointer-events:all; outline:none; }
+
+/* HTML labels */
+.radial-label{
+  position:absolute;
+  left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  color:var(--ink);
+  font-family: var(--font-sub);
+  font-size:clamp(0.9vw,1.6vmin,1.5vw);
+  text-shadow:0 0.2vw 0.6vw rgba(0,0,0,0.45);
+  z-index:1200;
+  white-space:nowrap;
+}
+
+/* 라디얼 위에 씌울 색상 오버레이 */
+.radial-overlay{
+  position:absolute;
+  left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  width:0; /* JavaScript에서 동적으로 설정 */
+  height:0; /* JavaScript에서 동적으로 설정 */
+  border-radius:50%;
+  opacity:0;
+  mix-blend-mode:multiply;
+  z-index:1000; /* hover images 아래, 라벨 위 */
+  pointer-events:none;
+  transition:opacity 0.3s ease;
+}
+
+/* 중앙 원형 이미지 */
+.center-image{
+  position:absolute;
+  left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:1100;
+  object-fit:contain;
+  border-radius:50%;
+  /* 크기는 JavaScript에서 동적으로 설정 */
+}
+
+/* innerplate 영역 호버 이미지 (centerImage처럼 동작) */
+.innerplate-hover-img{
+  position:absolute;
+  left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:1090;
+  object-fit:contain;
+  /* 크기는 JavaScript에서 동적으로 설정 */
+}
+
+/* footer */
+.footer{
+  color:var(--ink);
+  text-align:center;
+  font-family: var(--font-sub);
+  font-size:1vw;
+  position:fixed; left:50%; transform:translateX(-50%); bottom:2vh;
+  z-index:1400;
+}
+
+/* 진행 표시기 스타일 */
+.progress-indicator {
+  position: fixed;
+  top: 20vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.8rem;
+  z-index: 1500;
+}
+
+.progress-dot {
+  width: 1vw;
+  height: 1vw;
+  border-radius: 50%;
+  background: rgba(235, 254, 179, 0.3);
+  transition: all 0.3s ease;
+}
+
+.progress-dot.active {
+  background: var(--ink);
+  transform: scale(1.3);
+  box-shadow: 0 0 0.6vw rgba(235, 254, 179, 0.5);
+}
+
+/* 악기 선택 그리드 스타일 */
+.instrument-grid {
+  position: fixed;
+  left: 50%;
+  top: 60%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  max-width: 63vw;
+  width: 76.5vw;
+  z-index: 600;
+  pointer-events: auto;
+}
+
+.instrument-item {
+  aspect-ratio: 2.5;
+  background: rgba(235, 254, 179, 0.1);
+  border: 0.2vw dashed rgba(235, 254, 179, 0.3);
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  min-height: 7.2vw;
+}
+
+.instrument-text {
+  font-size: clamp(1.0vw, 2.1vw, 1.5vw);
+  font-weight: 500;
+  color: var(--ink);
+  font-family: var(--font-sub);
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.instrument-icon {
+  position: absolute;
+  left: 25%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.instrument-item:hover {
+  border-color: var(--accent);
+  background: rgba(6, 170, 186, 0.1);
+  transform: translateY(-0.2vw) scale(1.02);
+}
+
+/* 기본 호버 텍스트 이동 (개별 설정이 없는 경우) */
+.instrument-item:hover .instrument-text {
+  transform: translateX(-25%);
+}
+
+.instrument-item:hover .instrument-icon {
+  opacity: 1;
+}
+
+/* 개별 악기별 스타일 - 텍스트 이동 거리와 이미지 크기만 조절 */
+.instrument-item[data-instrument="violin"]:hover .instrument-text {
+  transform: translateX(-25%);
+}
+
+.instrument-item[data-instrument="violin"] .instrument-icon {
+  width: 80%;
+  height: 80%;
+  left: 30%;
+}
+
+.instrument-item[data-instrument="viola"]:hover .instrument-text {
+  transform: translateX(-25%);
+}
+
+.instrument-item[data-instrument="viola"] .instrument-icon {
+  width: 80%;
+  height: 80%;
+  left: 30%;
+}
+
+.instrument-item[data-instrument="cello"]:hover .instrument-text {
+  transform: translateX(-30%);
+}
+
+.instrument-item[data-instrument="cello"] .instrument-icon {
+  width: 80%;
+  height: 80%;
+  left: 30%;
+}
+
+.instrument-item[data-instrument="bass"]:hover .instrument-text {
+  transform: translateX(-25%);
+}
+
+.instrument-item[data-instrument="bass"] .instrument-icon {
+  width: 80%;
+  height: 80%;
+  left: 30%;
+}
+
+.instrument-item[data-instrument="clarinet"]:hover .instrument-text {
+  transform: translateX(-15%);
+}
+
+.instrument-item[data-instrument="clarinet"] .instrument-icon {
+  width: 80%;
+  height: 80%;
+  left: 30%;
+}
+
+.instrument-item[data-instrument="flute"]:hover .instrument-text {
+  transform: translateX(-20%);
+}
+
+.instrument-item[data-instrument="flute"] .instrument-icon {
+  width: 80%;
+  height: 80%;
+  left: 30%;
+}
+
+.instrument-item[data-instrument="trumpet"]:hover .instrument-text {
+  transform: translateX(-50%);
+}
+
+.instrument-item[data-instrument="trumpet"] .instrument-icon {
+  width: 40%;
+  height: 40%;
+  left: 50%;
+}
+
+.instrument-item[data-instrument="trombone"]:hover .instrument-text {
+  transform: translateX(-50%);
+}
+
+.instrument-item[data-instrument="trombone"] .instrument-icon {
+  width: 40%;
+  height: 40%;
+  left: 50%;
+}
+
+.instrument-item[data-instrument="horn"]:hover .instrument-text {
+  transform: translateX(-60%);
+}
+
+.instrument-item[data-instrument="horn"] .instrument-icon {
+  width: 40%;
+  height: 40%;
+  left: 45%;
+}
+
+.instrument-item.selected {
+  border-color: var(--accent);
+  background: var(--accent);
+  border-style: solid;
+  color: var(--bg);
+}
+
+/* 선택된 상자에서 텍스트와 이미지가 호버 상태로 유지 */
+.instrument-item.selected .instrument-text {
+  transform: translateX(-25%);
+}
+
+.instrument-item.selected .instrument-icon {
+  opacity: 1;
+}
+
+/* 개별 악기별 선택 상태 호버 효과 */
+.instrument-item[data-instrument="violin"].selected .instrument-text {
+  transform: translateX(-25%);
+}
+
+.instrument-item[data-instrument="viola"].selected .instrument-text {
+  transform: translateX(-25%);
+}
+
+.instrument-item[data-instrument="cello"].selected .instrument-text {
+  transform: translateX(-30%);
+}
+
+.instrument-item[data-instrument="bass"].selected .instrument-text {
+  transform: translateX(-25%);
+}
+
+.instrument-item[data-instrument="clarinet"].selected .instrument-text {
+  transform: translateX(-15%);
+}
+
+.instrument-item[data-instrument="flute"].selected .instrument-text {
+  transform: translateX(-20%);
+}
+
+.instrument-item[data-instrument="trumpet"].selected .instrument-text {
+  transform: translateX(-50%);
+}
+
+.instrument-item[data-instrument="trombone"].selected .instrument-text {
+  transform: translateX(-50%);
+}
+
+.instrument-item[data-instrument="horn"].selected .instrument-text {
+  transform: translateX(-60%);
+}
+
+.instrument-item.selected::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0.3vw;
+  background: var(--ink);
+}
+
+/* 악기 호버 이미지 */
+.instrument-hover-img{
+  position:fixed;
+  pointer-events:none;
+  z-index:1300;
+  width:10vw;
+  height:10vw;
+  object-fit:contain;
+  opacity:0;
+  transition:opacity 0.3s ease;
+}
+
+.instrument-hover-img.is-active{
+  opacity:1;
+}
+
+/* small screens */
+@media (max-width:768px){
+  .logo-container{ top:2vh; left:2vh; }
+  .question{ left:50%; transform:translateX(-50%); width:min(86vw,56ch); text-align:center; top: calc(11vh + 3.6vw); }
+  .instrument-grid { gap: 0.5rem; }
+}

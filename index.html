@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>포르타토 - 당신만의 클래식</title>
     <link rel="preconnect" href="https://bks0c7yrb0.execute-api.ap-northeast-2.amazonaws.com">
+    <!-- Sandoll 웹폰트 - <link> 태그로 직접 로드하여 GitHub Pages 호환성 향상 -->
+    <link rel="stylesheet" href="https://bks0c7yrb0.execute-api.ap-northeast-2.amazonaws.com/v1/api/css/drop_fontstream_css/?sid=gAAAAABkPXHo4qvpc1sn4CfuJL52Upc7AT8TVi8zpqX6aZtd3bQar6UDsPKea-00OVjtEVNfrYxuRy0KwyP7evvOGmFn-UJE3J2fgwZrrKxTO78AFSLAqGsk2yWcjZ17eIWeK8W_hEM0WwmzRDJ8PY0OKk9vf2d1gDahwuKJRCRKWS-LyUCxQDP7meUclfmM9WUoaP-N0gjIL5lyx-sFjuMGMGstTkeslXuA25WmkTdqzwQN4zkCffosmIAvef50EDHxTj2cl6OL">
     <link rel="stylesheet" href="index-styles.css">
 </head>
 <body>
@@ -114,6 +116,97 @@ window.addEventListener('load', function() {
             svgElement.style.setProperty('transform', 'translateX(-10px)', 'important');
         }
     }
+    
+    // 원형 도형을 점선에 맞춰 위치 조정
+    function positionCircleOnDashLine() {
+        const buttonBg = button.querySelector('.button-bg');
+        if (!buttonBg || !svgElement) return;
+        
+        // arrow-wrapper 기준으로 원 위치 계산
+        const arrowWrapper = button.querySelector('.arrow-wrapper');
+        if (!arrowWrapper) return;
+        
+        // 첫 번째 점선 세그먼트 그룹을 찾기
+        const firstSegmentGroup = svgElement.querySelector('.dash-segment');
+        if (!firstSegmentGroup) {
+            console.warn('점선 세그먼트를 찾을 수 없습니다');
+            return;
+        }
+        
+        const firstSegmentLine = firstSegmentGroup.querySelector('line');
+        if (!firstSegmentLine) return;
+        
+        // wrapper의 실제 화면 위치
+        const wrapperRect = arrowWrapper.getBoundingClientRect();
+        
+        // 첫 번째 세그먼트의 viewBox 좌표
+        const segmentX1 = parseFloat(firstSegmentLine.getAttribute('x1')) || 2;
+        const segmentY = parseFloat(firstSegmentLine.getAttribute('y1')) || 69.978;
+        
+        // SVG의 실제 크기와 viewBox
+        const svgRect = svgElement.getBoundingClientRect();
+        const viewBoxWidth = 1057;
+        const viewBoxHeight = 78;
+        
+        // viewBox 좌표를 SVG 내부 픽셀 좌표로 변환
+        const scaleX = svgRect.width / viewBoxWidth;
+        const scaleY = svgRect.height / viewBoxHeight;
+        
+        // SVG 내부에서의 점선 시작점 (SVG의 왼쪽 상단 기준)
+        const segmentPixelXInSVG = segmentX1 * scaleX;
+        const segmentPixelYInSVG = segmentY * scaleY;
+        
+        // SVG의 transform translateX(-10px) 고려
+        // SVG는 wrapper 내부에 있고, wrapper의 중심점이 기준
+        // SVG의 중심이 wrapper의 중심에 있으므로, SVG 왼쪽 상단은 (중심 - SVG너비/2, 중심 - SVG높이/2)
+        const svgCenterInWrapperX = wrapperRect.width / 2;
+        const svgCenterInWrapperY = wrapperRect.height / 2;
+        
+        // SVG의 왼쪽 상단을 wrapper 기준으로 계산 (SVG의 translateX(-10px) 고려)
+        const svgLeftTopX = svgCenterInWrapperX - svgRect.width / 2 - 10;
+        const svgLeftTopY = svgCenterInWrapperY - svgRect.height / 2;
+        
+        // 점선 시작점을 wrapper 기준으로 계산
+        const dashLineXInWrapper = svgLeftTopX + segmentPixelXInSVG;
+        const dashLineYInWrapper = svgLeftTopY + segmentPixelYInSVG;
+        
+        // 원의 크기
+        const circleWidth = parseFloat(getComputedStyle(buttonBg).width) || 50;
+        const circleRadius = circleWidth / 2;
+        
+        // 원의 중심을 점선 시작점에 맞춤
+        const circleCenterX = dashLineXInWrapper;
+        const circleCenterY = dashLineYInWrapper;
+        
+        // wrapper 중심 기준 퍼센트로 변환
+        const wrapperCenterX = wrapperRect.width / 2;
+        const wrapperCenterY = wrapperRect.height / 2;
+        
+        const leftPercent = ((circleCenterX - circleRadius - wrapperCenterX) / wrapperRect.width) * 100 + 50;
+        const topPercent = ((circleCenterY - wrapperCenterY) / wrapperRect.height) * 100;
+        
+        // CSS로 적용
+        buttonBg.style.left = `${leftPercent}%`;
+        buttonBg.style.top = `calc(50% + ${topPercent}%)`;
+        
+        console.log('원 위치 설정:', {
+            leftPercent,
+            topPercent,
+            dashLineXInWrapper,
+            dashLineYInWrapper,
+            wrapperRect
+        });
+    }
+    
+    // 점선 생성 후 위치 조정 (점선이 생성된 후에 실행)
+    setTimeout(function() {
+        positionCircleOnDashLine();
+    }, 100);
+    
+    // 리사이즈 이벤트 처리
+    window.addEventListener('resize', function() {
+        setTimeout(positionCircleOnDashLine, 100);
+    });
     
     let timers = [];
     let pulseAnimationId = null;

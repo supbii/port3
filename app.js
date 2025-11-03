@@ -90,6 +90,9 @@
   const refTextTitle = document.getElementById('refTextTitle');
   const refTextBody = document.getElementById('refTextBody');
 
+  // 라디얼 위에 씌울 색상 오버레이 (mood, flow, extras 호버 시)
+  const radialOverlay = document.getElementById('radialOverlay');
+
   // 선택지별 오버레이 색상 (필요 시 손쉽게 조정 가능)
   const OVERLAY_COLORS = {
     // place
@@ -137,6 +140,26 @@
     refDot.style.opacity = 0;
     refWrap.style.visibility = 'hidden';
     if (refText) refText.style.opacity = 0;
+  }
+
+  // 라디얼 위에 색상 오버레이 표시 (모든 단계 호버 시)
+  function showRadialOverlay(opt){
+    if(!radialOverlay || !opt) return;
+    const color = OVERLAY_COLORS[opt?.value] || '#BFD6CF';
+    radialOverlay.style.background = color;
+    radialOverlay.style.opacity = 0.4; // 은은하게
+    // 라디얼 이미지 크기에 맞춰 오버레이 크기 설정
+    if(imgPlate){
+      const plateRect = imgPlate.getBoundingClientRect();
+      radialOverlay.style.width = plateRect.width + 'px';
+      radialOverlay.style.height = plateRect.height + 'px';
+    }
+  }
+
+  // 라디얼 위 색상 오버레이 숨기기
+  function hideRadialOverlay(){
+    if(!radialOverlay) return;
+    radialOverlay.style.opacity = 0;
   }
 
   // 참조 원 위치/크기를 라디얼 plate.svg와 동일하게 설정하고, 좌/우 배치
@@ -512,6 +535,8 @@
         setRefCircleOverlay(opt, q);
         showRefText(opt);
         positionRefText(q);
+        // 라디얼 위에 색상 오버레이 표시 (mood, flow, extras 호버 시)
+        showRadialOverlay(opt);
       });
       p.addEventListener('pointerout', ()=>{
         hideAllHover();
@@ -519,6 +544,7 @@
         hideInnerplateHoverImage();
         hideSideHint();
         clearRefCircle();
+        hideRadialOverlay();
       });
       p.addEventListener('focus', ()=>{
         hideAllHover();
@@ -530,6 +556,8 @@
         setRefCircleOverlay(opt, def.quad);
         showRefText(opt);
         positionRefText(def.quad);
+        // 라디얼 위에 색상 오버레이 표시 (mood, flow, extras 호버 시)
+        showRadialOverlay(opt);
       });
       p.addEventListener('blur', ()=>{
         hideAllHover();
@@ -537,6 +565,7 @@
         hideInnerplateHoverImage();
         clearRefCircle();
         if (refText) refText.style.opacity = 0;
+        hideRadialOverlay();
       });
 
       // click: register selection for current step, move to next
@@ -575,6 +604,7 @@
       hideCenterImage();
       hideInnerplateHoverImage();
       clearRefCircle();
+      hideRadialOverlay();
     });
   }
 

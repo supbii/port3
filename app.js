@@ -357,9 +357,38 @@
   function loadIntrinsic(el){
     return new Promise(resolve=>{
       if(!el) return resolve({w:100,h:100});
-      if(el.complete && el.naturalWidth) return resolve({w:el.naturalWidth,h:el.naturalHeight});
-      el.addEventListener('load', function onl(){ el.removeEventListener('load', onl); resolve({w:el.naturalWidth,h:el.naturalHeight}); });
-      el.addEventListener('error', function one(){ el.removeEventListener('error', one); resolve({w:200,h:200}); });
+      if(el.complete && el.naturalWidth && el.naturalWidth > 0 && el.naturalHeight > 0) {
+        return resolve({w:el.naturalWidth,h:el.naturalHeight});
+      }
+      // 이미지가 로드 중이면 기다림
+      const timeout = setTimeout(()=>{
+        el.removeEventListener('load', onl);
+        el.removeEventListener('error', one);
+        console.warn('이미지 로딩 타임아웃:', el.src);
+        resolve({w:el.naturalWidth || 200, h:el.naturalHeight || 200});
+      }, 10000); // 10초 타임아웃
+      const onl = function(){ 
+        clearTimeout(timeout);
+        el.removeEventListener('load', onl); 
+        el.removeEventListener('error', one);
+        resolve({w:el.naturalWidth,h:el.naturalHeight}); 
+      };
+      const one = function(){ 
+        clearTimeout(timeout);
+        el.removeEventListener('load', onl); 
+        el.removeEventListener('error', one);
+        console.error('이미지 로딩 실패:', el.src);
+        resolve({w:200,h:200}); 
+      };
+      el.addEventListener('load', onl);
+      el.addEventListener('error', one);
+      // 이미지가 아직 시작되지 않았다면 강제로 로드
+      if(el.src && !el.complete) {
+        // 이미지 로딩 강제 재시도
+        const src = el.src;
+        el.src = '';
+        el.src = src;
+      }
     });
   }
 
@@ -391,9 +420,14 @@
       if(!el || !info) return;
       el.style.width = Math.round(info.w * scale) + 'px';
       el.style.height = Math.round(info.h * scale) + 'px';
+      // GitHub Pages에서 중앙 정렬을 보장하기 위해 명시적으로 설정
+      el.style.position = 'absolute';
       el.style.left = '50%';
       el.style.top  = '50%';
       el.style.transform = 'translate(-50%,-50%)';
+      el.style.transformOrigin = '50% 50%';
+      el.style.margin = '0';
+      el.style.display = 'block';
     });
 
     // hover images same scale & center
@@ -403,9 +437,14 @@
       if(!el || !info) return;
       el.style.width = Math.round(info.w * scale * 1.013) + 'px';
       el.style.height = Math.round(info.h * scale * 1.013) + 'px';
+      // GitHub Pages에서 중앙 정렬을 보장하기 위해 명시적으로 설정
+      el.style.position = 'absolute';
       el.style.left = '50%';
       el.style.top  = '50%';
       el.style.transform = 'translate(-50%,-50%)';
+      el.style.transformOrigin = '50% 50%';
+      el.style.margin = '0';
+      el.style.display = 'block';
       el.classList.remove('is-active');
     });
 
@@ -419,9 +458,13 @@
       // innerplate 크기와 정확히 동일하게 설정
       innerplateHoverImg.style.width = Math.round(inr.w * scale) + 'px';
       innerplateHoverImg.style.height = Math.round(inr.h * scale) + 'px';
+      // GitHub Pages에서 중앙 정렬을 보장하기 위해 명시적으로 설정
+      innerplateHoverImg.style.position = 'absolute';
       innerplateHoverImg.style.left = '50%';
       innerplateHoverImg.style.top = '50%';
       innerplateHoverImg.style.transform = 'translate(-50%,-50%)';
+      innerplateHoverImg.style.transformOrigin = '50% 50%';
+      innerplateHoverImg.style.margin = '0';
     }
     overlay.style.height = overlayPx + 'px';
     overlay.style.left = '50%';
@@ -429,6 +472,9 @@
     overlay.style.transform = 'translate(-50%,-50%)';
     overlay.setAttribute('viewBox','0 0 800 800');
 
+    // 이미지가 실제로 렌더링될 때까지 약간 대기 (GitHub Pages 환경에서 필요)
+    await new Promise(resolve => setTimeout(resolve, 50));
+    
     // compute plate/inner bounds to place labels between them
     const plateRect = imgPlate.getBoundingClientRect();
     const innerRect = imgInner.getBoundingClientRect();

@@ -60,14 +60,21 @@ body {
     left: 65%;
     transform: translateX(-50%);
     opacity: 0;
-    animation: fadeIn 1.5s forwards;
+    animation: fadeInButton 1.5s forwards; /* 버튼 전용 애니메이션 */
     animation-delay: 0.8s;
 }
 
 @keyframes fadeIn {
     to {
         opacity: 1;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%); /* 로고용 - 중앙 정렬 */
+    }
+}
+
+@keyframes fadeInButton {
+    to {
+        opacity: 1;
+        transform: translateX(-50%); /* 버튼용 - X축만 이동 */
     }
 }
 
@@ -77,14 +84,177 @@ body {
     height: auto;
 }
 
-.landing-next-arrow {
+.arrow-wrapper {
     width: var(--arrow-width);
     height: auto;
-    transition: transform 0.3s ease-in-out;
+    position: relative;
+    display: inline-block;
+    transform: translateX(80px) !important; /* 전체를 오른쪽으로 이동 - 고정 */
+    transition: none !important; /* 모든 transition 제거 */
 }
 
-.landing-next-arrow:hover {
-    transform: scale(1.1); /* 호버 시 약간 확대 */
+.button-bg {
+    position: absolute;
+    top: 50%;
+    left: -3%; /* 화살표 선 왼쪽 끝쪽으로 이동 */
+    transform: translateY(-50%);
+    display: block;
+    border-radius: 50%;
+    background: rgba(217, 255, 240, 0.2);
+    width: clamp(50px, 6%, 80px); /* 초기 원 크기 - 반응형 */
+    height: clamp(50px, 6%, 80px); /* width와 동일하여 정원 유지 */
+    aspect-ratio: 1; /* 정원 비율 보장 */
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+    pointer-events: none;
+    mix-blend-mode: overlay; /* 화살표 위에 올라갔을 때 밝게 표시 */
+    animation: nudgeRight 2s ease-in-out infinite; /* 오른쪽으로 살짝 밀리는 모션 반복 */
+    /* transform 변경 없음 - 화살표 위치에 영향 없도록 */
+    /* width 변경 시에도 다른 요소 위치에 영향 없도록 */
+}
+
+@keyframes nudgeRight {
+    0%, 100% {
+        transform: translateY(-50%) translateX(0);
+    }
+    50% {
+        transform: translateY(-50%) translateX(8px); /* 오른쪽으로 살짝 밀림 */
+    }
+}
+
+.landing-next-arrow {
+    width: 100%;
+    height: auto;
+    display: block;
+    position: relative;
+    z-index: 1;
+    transform: translateX(-10px) !important; /* 인라인 스타일과 동일하게 고정 */
+    transition: none !important; /* 모든 transition 제거 */
+}
+
+.landing-next-button {
+    display: block;
+    cursor: pointer;
+    position: absolute;
+    top: calc(60% + 30vh); /* 로고 위치에서 아래로 15vh만큼 이동 */
+    left: 65%;
+    transform: translateX(-50%);
+    opacity: 0;
+    animation: fadeIn 1.5s forwards;
+    animation-delay: 0.8s;
+    /* transition 제거 - 호버 시 위치 변경 방지 */
+}
+
+.landing-next-button:hover .button-bg {
+    width: 80%; /* 화살표 끝까지 확장 (화살표 끝 약 74.2% + 여유) */
+    height: clamp(50px, 6%, 80px); /* 높이는 초기값 유지하여 타원형으로 늘어남 */
+    border-radius: 50px; /* 늘어났을 때는 둥근 모서리 */
+    background: rgba(217, 255, 240, 0.35);
+    mix-blend-mode: overlay; /* 호버 시에도 오버레이 유지 */
+    animation: none; /* 호버 시에는 밀리는 모션 중지 */
+}
+
+/* 호버 시에도 화살표 위치 변경 없음 - transform 제거하여 초기 위치 유지 */
+
+.landing-next-button:active {
+    transform: translateX(-50%) scale(0.95);
+}
+
+.landing-next-button:active .arrow-wrapper {
+    transform: translateX(80px) !important; /* active 시에도 위치 고정 */
+}
+
+.landing-next-button:active .landing-next-arrow {
+    transform: translateX(-10px) !important; /* active 시에도 위치 고정 */
+}
+
+/* 모든 상태에서 화살표 위치 절대 고정 - 모든 셀렉터에 !important */
+.landing-next-button .arrow-wrapper,
+.landing-next-button:hover .arrow-wrapper,
+.landing-next-button:active .arrow-wrapper,
+.landing-next-button:focus .arrow-wrapper {
+    transform: translateX(80px) !important;
+    transition: none !important;
+}
+
+.landing-next-button .landing-next-arrow,
+.landing-next-button:hover .landing-next-arrow,
+.landing-next-button:active .landing-next-arrow,
+.landing-next-button:focus .landing-next-arrow {
+    transform: translateX(-10px) !important;
+    transition: none !important;
+}
+
+/* 호버 효과는 JavaScript로 처리 */
+.dash-segment {
+    will-change: transform;
+    transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+}
+
+.landing-next-button:hover .arrow-1 {
+    animation: waveUp 0.2s ease-out 0.96s forwards;
+}
+
+.landing-next-button:hover .arrow-2 {
+    animation: waveGlowFinal 0.6s ease-out 1.0s forwards;
+}
+
+/* 각 점선 세그먼트가 튀어오르는 효과 */
+@keyframes dashWave {
+    0% {
+        transform: translateY(0);
+        opacity: 0.7;
+    }
+    50% {
+        transform: translateY(-15px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 0.9;
+    }
+}
+
+/* 화살표가 튀어오르는 효과 */
+@keyframes waveUp {
+    0% {
+        transform: translateY(0);
+        opacity: 0.7;
+    }
+    50% {
+        transform: translateY(-10px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 0.9;
+    }
+}
+
+/* 마지막 화살표: 글로우 + 스케일 업 */
+@keyframes waveGlowFinal {
+    0% {
+        transform: translateY(0) scale(1);
+        filter: drop-shadow(0 0 0px rgba(217, 255, 240, 0));
+        opacity: 0.7;
+    }
+    30% {
+        transform: translateY(-8px) scale(1.05);
+        filter: drop-shadow(0 -3px 8px rgba(217, 255, 240, 0.6));
+        opacity: 0.9;
+    }
+    60% {
+        transform: translateY(-5px) scale(1.1);
+        filter: drop-shadow(0 -5px 15px rgba(217, 255, 240, 0.8))
+                drop-shadow(0 0 20px rgba(217, 255, 240, 0.6));
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-5px) scale(1.15);
+        filter: drop-shadow(0 -8px 25px rgba(217, 255, 240, 1))
+                drop-shadow(0 0 35px rgba(217, 255, 240, 0.9));
+        opacity: 1;
+    }
 }
 
 /* 모바일 화면을 위한 반응형 디자인 */

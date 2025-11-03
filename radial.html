@@ -10,13 +10,13 @@
 <body>
   <!-- 로고 -->
   <div class="logo-container">
-    <img class="logo-base" src="asset/logobase.png" alt="PORTATO 로고 기본" />
-    <img class="logo-top"  src="asset/logotop.png"  alt="PORTATO 로고 상단" />
+    <img class="logo-base" src="/asset/logobase.png" alt="PORTATO 로고 기본" />
+    <img class="logo-top"  src="/asset/logotop.png"  alt="PORTATO 로고 상단" />
   </div>
 
   <!-- 헤더 배경 -->
   <header class="header">
-    <img class="header-bg" src="asset/radialheader.png" alt="" aria-hidden="true" />
+    <img class="header-bg" src="/asset/radialheader.png" alt="" aria-hidden="true" />
   </header>
 
   <main class="stage">
@@ -38,16 +38,16 @@
 
     <div class="radial-container" id="radialContainer" role="application" aria-label="라디얼 선택">
       <!-- base layers -->
-      <img class="radial-img radial-line"   id="img-line"   src="radial/line.svg"       alt="라디얼 라인" />
-      <img class="radial-img radial-plate"  id="img-plate"  src="radial/plate.svg"      alt="라디얼 플레이트" />
-      <img class="radial-img radial-inner"  id="img-inner"  src="radial/innerplate.svg" alt="라디얼 이너플레이트" />
-      <img class="radial-img radial-center" id="img-center" src="radial/center.svg"     alt="라디얼 센터" />
+      <img class="radial-img radial-line"   id="img-line"   src="/radial/line.svg"       alt="라디얼 라인" />
+      <img class="radial-img radial-plate"  id="img-plate"  src="/radial/plate.svg"      alt="라디얼 플레이트" />
+      <img class="radial-img radial-inner"  id="img-inner"  src="/radial/innerplate.svg" alt="라디얼 이너플레이트" />
+      <img class="radial-img radial-center" id="img-center" src="/radial/center.svg"     alt="라디얼 센터" />
 
       <!-- hover images (quadrant-specific visual previews) -->
-      <img id="hover-ne" class="hover-img" src="radial/radialhover1.svg" alt="" aria-hidden="true" />
-      <img id="hover-nw" class="hover-img" src="radial/radialhover2.svg" alt="" aria-hidden="true" />
-      <img id="hover-sw" class="hover-img" src="radial/radialhover3.svg" alt="" aria-hidden="true" />
-      <img id="hover-se" class="hover-img" src="radial/radialhover4.svg" alt="" aria-hidden="true" />
+      <img id="hover-ne" class="hover-img" src="/radial/radialhover1.svg" alt="" aria-hidden="true" />
+      <img id="hover-nw" class="hover-img" src="/radial/radialhover2.svg" alt="" aria-hidden="true" />
+      <img id="hover-sw" class="hover-img" src="/radial/radialhover3.svg" alt="" aria-hidden="true" />
+      <img id="hover-se" class="hover-img" src="/radial/radialhover4.svg" alt="" aria-hidden="true" />
 
       <!-- innerplate 영역에 표시될 호버 이미지 (centerImage처럼 동작) -->
       <img id="innerplate-hover-img" class="innerplate-hover-img" src="" alt="" aria-hidden="true" style="display: none;" />
@@ -74,7 +74,7 @@
       <div class="radial-label" id="label-sw">라벨4</div>
 
       <!-- 중앙 원형 이미지 -->
-      <img class="center-image" id="centerImage" src="radial/forest.png" alt="중앙 이미지" style="display: none;" />
+      <img class="center-image" id="centerImage" src="/radial/forest.png" alt="중앙 이미지" style="display: none;" />
     </div>
 
     
@@ -94,52 +94,52 @@
     <div class="instrument-grid" id="instrumentGrid" style="display: none;">
       <div class="instrument-item" data-instrument="violin">
         <span class="instrument-text">바이올린</span>
-        <img class="instrument-icon" src="radial/instrument/Vn.svg" alt="바이올린" />
+        <img class="instrument-icon" src="/radial/instrument/Vn.svg" alt="바이올린" />
       </div>
       <div class="instrument-item" data-instrument="viola">
         <span class="instrument-text">비올라</span>
-        <img class="instrument-icon" src="radial/instrument/Vla.svg" alt="비올라" />
+        <img class="instrument-icon" src="/radial/instrument/Vla.svg" alt="비올라" />
       </div>
       <div class="instrument-item" data-instrument="cello">
         <span class="instrument-text">첼로</span>
-        <img class="instrument-icon" src="radial/instrument/Vc.svg" alt="첼로" />
+        <img class="instrument-icon" src="/radial/instrument/Vc.svg" alt="첼로" />
       </div>
       <div class="instrument-item" data-instrument="bass">
         <span class="instrument-text">콘트라베이스</span>
-        <img class="instrument-icon" src="radial/instrument/Cb.svg" alt="콘트라베이스" />
+        <img class="instrument-icon" src="/radial/instrument/Cb.svg" alt="콘트라베이스" />
       </div>
       <div class="instrument-item" data-instrument="clarinet">
         <span class="instrument-text">클라리넷</span>
-        <img class="instrument-icon" src="radial/instrument/Cl.svg" alt="클라리넷" />
+        <img class="instrument-icon" src="/radial/instrument/Cl.svg" alt="클라리넷" />
       </div>
       <div class="instrument-item" data-instrument="flute">
         <span class="instrument-text">플룻</span>
-        <img class="instrument-icon" src="radial/instrument/Fl.svg" alt="플룻" />
+        <img class="instrument-icon" src="/radial/instrument/Fl.svg" alt="플룻" />
       </div>
       <div class="instrument-item" data-instrument="trumpet">
         <span class="instrument-text">트럼펫</span>
-        <img class="instrument-icon" src="radial/instrument/Tp.svg" alt="트럼펫" />
+        <img class="instrument-icon" src="/radial/instrument/Tp.svg" alt="트럼펫" />
       </div>
       <div class="instrument-item" data-instrument="trombone">
         <span class="instrument-text">트럼본</span>
-        <img class="instrument-icon" src="radial/instrument/Trb.svg" alt="트럼본" />
+        <img class="instrument-icon" src="/radial/instrument/Trb.svg" alt="트럼본" />
       </div>
       <div class="instrument-item" data-instrument="horn">
         <span class="instrument-text">호른</span>
-        <img class="instrument-icon" src="radial/instrument/Hn.svg" alt="호른" />
+        <img class="instrument-icon" src="/radial/instrument/Hn.svg" alt="호른" />
       </div>
     </div>
 
     <!-- 악기 호버 이미지들 -->
-    <img id="instrument-hover-violin" class="instrument-hover-img" src="radial/instrument/Vn.svg" alt="바이올린" style="display: none;" />
-    <img id="instrument-hover-viola" class="instrument-hover-img" src="radial/instrument/Vla.svg" alt="비올라" style="display: none;" />
-    <img id="instrument-hover-cello" class="instrument-hover-img" src="radial/instrument/Vc.svg" alt="첼로" style="display: none;" />
-    <img id="instrument-hover-bass" class="instrument-hover-img" src="radial/instrument/Cb.svg" alt="콘트라베이스" style="display: none;" />
-    <img id="instrument-hover-clarinet" class="instrument-hover-img" src="radial/instrument/Cl.svg" alt="클라리넷" style="display: none;" />
-    <img id="instrument-hover-flute" class="instrument-hover-img" src="radial/instrument/Fl.svg" alt="플룻" style="display: none;" />
-    <img id="instrument-hover-trumpet" class="instrument-hover-img" src="radial/instrument/Tp.svg" alt="트럼펫" style="display: none;" />
-    <img id="instrument-hover-trombone" class="instrument-hover-img" src="radial/instrument/Trb.svg" alt="트럼본" style="display: none;" />
-    <img id="instrument-hover-horn" class="instrument-hover-img" src="radial/instrument/Hn.svg" alt="호른" style="display: none;" />
+    <img id="instrument-hover-violin" class="instrument-hover-img" src="/radial/instrument/Vn.svg" alt="바이올린" style="display: none;" />
+    <img id="instrument-hover-viola" class="instrument-hover-img" src="/radial/instrument/Vla.svg" alt="비올라" style="display: none;" />
+    <img id="instrument-hover-cello" class="instrument-hover-img" src="/radial/instrument/Vc.svg" alt="첼로" style="display: none;" />
+    <img id="instrument-hover-bass" class="instrument-hover-img" src="/radial/instrument/Cb.svg" alt="콘트라베이스" style="display: none;" />
+    <img id="instrument-hover-clarinet" class="instrument-hover-img" src="/radial/instrument/Cl.svg" alt="클라리넷" style="display: none;" />
+    <img id="instrument-hover-flute" class="instrument-hover-img" src="/radial/instrument/Fl.svg" alt="플룻" style="display: none;" />
+    <img id="instrument-hover-trumpet" class="instrument-hover-img" src="/radial/instrument/Tp.svg" alt="트럼펫" style="display: none;" />
+    <img id="instrument-hover-trombone" class="instrument-hover-img" src="/radial/instrument/Trb.svg" alt="트럼본" style="display: none;" />
+    <img id="instrument-hover-horn" class="instrument-hover-img" src="/radial/instrument/Hn.svg" alt="호른" style="display: none;" />
   </main>
 
   <!-- 푸터 -->

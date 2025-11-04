@@ -11,7 +11,7 @@
     {
       id: 'place',
       title: '어디에서 클래식을 만나고 싶나요?',
-      hint: '당신이 머물고 싶은 장소를 선택하세요.',
+      hint: '당신이 음악과 함께 머물고 싶은 장소를 선택하세요.',
       options: [
         { value:'lawn', label:'들판', en:'Lawn' },       // NE
         { value:'forest', label:'숲속', en:'Forest' },    // NW
@@ -44,7 +44,7 @@
     {
       id: 'extras',
       title: '공연의 여운을 어떻게 이어가고 싶은가요?',
-      hint: '포르타토에서 제공되는 활동 중, 공연을 어떻게 완성하고 싶은지 고르세요.',
+      hint: '어떤 포르타토 활동으로 공연을 완성하고 싶은지 고르세요.',
       options: [
         { value:'dialogue', label:'연주자와 소통', en:'Dialogue' },      // NE
         { value:'refresh', label:'다과 시간', en:'Refreshment' },        // NW

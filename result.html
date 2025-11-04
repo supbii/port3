@@ -609,6 +609,90 @@ const qrArea = document.getElementById('qrArea');
 const qrImg = document.getElementById('qrImg');
 
 const ARCHIVE_KEY = "portato_archive_v1";
+const STORAGE_THRESHOLD = 4 * 1024 * 1024; // 4MB (안전한 임계값)
+const STORAGE_TARGET = 3 * 1024 * 1024; // 3MB (압축 후 목표 용량)
+
+// localStorage 용량 체크 (근사치)
+function getStorageSize() {
+  let total = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    const value = localStorage.getItem(key);
+    total += key.length + value.length;
+  }
+  return total;
+}
+
+// 이미지 압축 함수 (PNG를 JPEG로 변환하여 품질 낮추기)
+async function compressImage(dataURL, quality = 0.7) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      // 이미지 크기를 80%로 줄임 (용량 대폭 감소)
+      const maxDimension = Math.max(img.width, img.height);
+      const scale = maxDimension > 800 ? 800 / maxDimension : 0.8;
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      
+      // JPEG로 변환 (PNG보다 용량이 작음)
+      const compressed = canvas.toDataURL('image/jpeg', quality);
+      console.log(`📦 이미지 압축: ${(dataURL.length / 1024).toFixed(2)}KB → ${(compressed.length / 1024).toFixed(2)}KB`);
+      resolve(compressed);
+    };
+    img.onerror = () => resolve(dataURL); // 실패 시 원본 반환
+    img.src = dataURL;
+  });
+}
+
+// 아카이브 용량 관리: 오래된 이미지부터 압축
+async function manageArchiveStorage(newEntrySize) {
+  const currentSize = getStorageSize();
+  const estimatedSize = currentSize + newEntrySize;
+  
+  console.log(`📊 현재 저장소 용량: ${(currentSize / 1024 / 1024).toFixed(2)}MB, 예상 용량: ${(estimatedSize / 1024 / 1024).toFixed(2)}MB`);
+  
+  // 임계값 초과 시 오래된 이미지부터 압축
+  if (estimatedSize > STORAGE_THRESHOLD) {
+    console.log('⚠️ 저장소 용량 임계값 초과! 오래된 이미지 압축 시작...');
+    
+    let archive = JSON.parse(localStorage.getItem(ARCHIVE_KEY) || '[]');
+    // 오래된 순으로 정렬 (timestamp 오름차순)
+    archive.sort((a, b) => a.timestamp - b.timestamp);
+    
+    let compressedCount = 0;
+    for (let i = 0; i < archive.length; i++) {
+      const item = archive[i];
+      
+      // rightCircleImage가 있고 압축되지 않은 경우만 압축
+      if (item.rightCircleImage && !item.rightCircleImage.includes('image/jpeg')) {
+        const originalSize = item.rightCircleImage.length;
+        const compressed = await compressImage(item.rightCircleImage, 0.7);
+        item.rightCircleImage = compressed;
+        item.compressed = true; // 압축 플래그 추가
+        
+        compressedCount++;
+        console.log(`✅ ${i + 1}번째 아이템 압축 완료`);
+        
+        // 압축 후 용량 재확인
+        const testArchive = JSON.parse(JSON.stringify(archive));
+        const testSize = new Blob([JSON.stringify(testArchive)]).size;
+        if (testSize < STORAGE_TARGET) {
+          console.log(`✅ 목표 용량 달성: ${(testSize / 1024 / 1024).toFixed(2)}MB`);
+          break;
+        }
+      }
+    }
+    
+    // 압축된 아카이브 저장
+    localStorage.setItem(ARCHIVE_KEY, JSON.stringify(archive));
+    console.log(`📦 총 ${compressedCount}개 이미지 압축 완료`);
+  }
+}
 const SELECTION_KEY = "portatoSelections";
 
 /* selections 형식 예상:
@@ -1926,10 +2010,50 @@ btnUseTicket.addEventListener('click', async ()=> {
       rightCircleImage: rightCircleImageDataURL
     };
     
-    archive.push(entry);
-    localStorage.setItem(ARCHIVE_KEY, JSON.stringify(archive));
+    // 새 항목 크기 예측
+    const newEntrySize = new Blob([JSON.stringify(entry)]).size;
     
-    console.log('✅ 아카이브에 저장 완료:', entry.id);
+    // 용량 관리: 필요시 오래된 이미지 압축
+    await manageArchiveStorage(newEntrySize);
+    
+    archive.push(entry);
+    
+    // 저장 시도
+    try {
+      localStorage.setItem(ARCHIVE_KEY, JSON.stringify(archive));
+      console.log('✅ 아카이브에 저장 완료:', entry.id);
+    } catch (storageError) {
+      // 저장 실패 시 (용량 초과) 더 많은 이미지 압축
+      console.warn('⚠️ 저장 실패, 추가 압축 시도...', storageError);
+      
+      // 더 강한 압축 (품질 0.5)
+      archive.sort((a, b) => a.timestamp - b.timestamp);
+      for (let i = 0; i < archive.length; i++) {
+        const item = archive[i];
+        if (item.rightCircleImage) {
+          const compressed = await compressImage(item.rightCircleImage, 0.5);
+          item.rightCircleImage = compressed;
+          item.compressed = true;
+          
+          try {
+            localStorage.setItem(ARCHIVE_KEY, JSON.stringify(archive));
+            console.log('✅ 추가 압축 후 저장 성공');
+            break;
+          } catch (e) {
+            // 계속 압축
+          }
+        }
+      }
+      
+      // 최종 저장 시도
+      try {
+        localStorage.setItem(ARCHIVE_KEY, JSON.stringify(archive));
+        console.log('✅ 최종 저장 완료');
+      } catch (finalError) {
+        console.error('❌ 저장 실패 - 용량이 너무 큽니다:', finalError);
+        alert('저장소 용량이 부족합니다. 일부 오래된 항목을 삭제해주세요.');
+      }
+    }
     
     // 버튼 숨기기
     btnUseTicket.style.display = 'none';
@@ -2034,7 +2158,7 @@ btnUseTicket.addEventListener('click', async ()=> {
       bgDiv.style.backgroundImage = `url("${resolvePath('result/background_get.png')}")`;
     }
     
-    // 아카이브 페이지 가기 버튼 추가
+    // 아카이브 페이지 가기 버튼 추가 (숨김)
     const archiveBtn = document.createElement('a');
     archiveBtn.href = 'archive.html';
     archiveBtn.textContent = '아카이브 보기';
@@ -2054,6 +2178,7 @@ btnUseTicket.addEventListener('click', async ()=> {
       cursor: pointer;
       transition: all 0.3s ease;
       font-weight: 500;
+      display: none;
     `;
     archiveBtn.onmouseover = () => {
       archiveBtn.style.background = 'rgba(60, 108, 113, 0.8)';

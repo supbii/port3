@@ -638,6 +638,53 @@ console.log('파싱된 selections 객체:', selections);
 console.log('selections 타입:', typeof selections);
 console.log('selections 키들:', Object.keys(selections));
 
+// GitHub Pages base path 자동 감지
+function getBasePath() {
+  const path = window.location.pathname;
+  // GitHub Pages에서 저장소 이름이 URL에 포함된 경우
+  // 예: /repo-name/result.html → /repo-name/
+  // 예: /repo-name/ → /repo-name/
+  const pathParts = path.split('/').filter(p => p);
+  
+  // 파일이 루트에 있는 경우 (예: /result.html)
+  if (pathParts.length === 1 && pathParts[0].endsWith('.html')) {
+    return '/';
+  }
+  
+  // 파일이 하위 디렉토리에 있는 경우 (예: /repo-name/result.html)
+  if (pathParts.length > 1) {
+    const lastPart = pathParts[pathParts.length - 1];
+    if (lastPart.endsWith('.html')) {
+      // HTML 파일이 있는 경우, 그 상위 디렉토리까지가 base path
+      const basePath = '/' + pathParts.slice(0, -1).join('/') + '/';
+      return basePath;
+    }
+    // HTML 파일이 아닌 경우 (예: /repo-name/)
+    const basePath = '/' + pathParts.join('/') + '/';
+    return basePath;
+  }
+  
+  // 루트에 있는 경우
+  return '/';
+}
+
+// 상대 경로를 절대 경로로 변환 (GitHub Pages 호환)
+function resolvePath(relativePath) {
+  // 이미 절대 경로인 경우 그대로 반환
+  if (relativePath.startsWith('/') || relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
+    return relativePath;
+  }
+  // base path 추가
+  const basePath = getBasePath();
+  // base path가 '/'이고 상대 경로가 이미 '/'로 시작하지 않으면 그대로
+  if (basePath === '/' && !relativePath.startsWith('/')) {
+    return '/' + relativePath;
+  }
+  // base path 제거 (중복 방지)
+  const cleanBasePath = basePath.endsWith('/') ? basePath.slice(0, -1) : basePath;
+  return cleanBasePath + '/' + relativePath;
+}
+
 // helper: 안전한 이미지 로드 (Image 객체 -> Promise)
 function loadImage(src){
   return new Promise((resolve) => {
@@ -650,11 +697,12 @@ function loadImage(src){
       console.warn("이미지 로드 실패:", src);
       resolve(null);
     };
-    img.src = src;
+    // GitHub Pages 호환을 위해 경로 해결
+    img.src = resolvePath(src);
   });
 }
 
-// 장소별 배경 이미지 매핑
+// 장소별 배경 이미지 매핑 (경로는 loadImage에서 자동 해결)
 const PLACE_BACKGROUNDS = {
   'lawn': 'result/ticket/lawn_img.png',
   'forest': 'result/ticket/forest_img.png',
@@ -1965,11 +2013,11 @@ btnUseTicket.addEventListener('click', async ()=> {
     // 백그라운드 이미지 변경
     const bgLayer = document.getElementById('bgLayer');
     if (bgLayer) {
-      bgLayer.style.backgroundImage = 'url("result/background_get.png")';
+      bgLayer.style.backgroundImage = `url("${resolvePath('result/background_get.png')}")`;
     }
     const bgDiv = document.querySelector('.bg');
     if (bgDiv) {
-      bgDiv.style.backgroundImage = 'url("result/background_get.png")';
+      bgDiv.style.backgroundImage = `url("${resolvePath('result/background_get.png')}")`;
     }
     
     // 아카이브 페이지 가기 버튼 추가
@@ -2052,11 +2100,40 @@ function showQRForDataURL(dataURL){
     console.log('ticketContent 요소:', ticketContent);
     console.log('selections 객체:', selections);
     
+    // GitHub Pages 호환: HTML의 img 태그 src 경로 자동 수정
+    const ticketImages = ['ticketBack', 'forestImg', 'leftCircle', 'leftSwirl', 'rightCircle'];
+    ticketImages.forEach(imgId => {
+      const imgEl = document.getElementById(imgId);
+      if (imgEl && imgEl.src) {
+        // 현재 src가 상대 경로인 경우만 수정
+        const currentSrc = imgEl.getAttribute('src');
+        if (currentSrc && !currentSrc.startsWith('http') && !currentSrc.startsWith('data:')) {
+          imgEl.src = resolvePath(currentSrc);
+          console.log(`🔄 ${imgId} 경로 수정: ${currentSrc} → ${resolvePath(currentSrc)}`);
+        }
+      }
+    });
+    
+    // CSS background 이미지도 수정
+    const bgElements = [document.querySelector('.bg'), document.getElementById('bgLayer')];
+    bgElements.forEach(el => {
+      if (el) {
+        const bgImage = window.getComputedStyle(el).backgroundImage;
+        if (bgImage && bgImage.includes('result/')) {
+          const urlMatch = bgImage.match(/url\(["']?([^"']+)["']?\)/);
+          if (urlMatch && urlMatch[1] && !urlMatch[1].startsWith('http')) {
+            el.style.backgroundImage = `url("${resolvePath(urlMatch[1])}")`;
+            console.log(`🔄 배경 이미지 경로 수정: ${urlMatch[1]} → ${resolvePath(urlMatch[1])}`);
+          }
+        }
+      }
+    });
+    
     // 장소에 따른 배경 이미지 설정
     if (selections.place && forestImgEl) {
       const backgroundImage = PLACE_BACKGROUNDS[selections.place] || PLACE_BACKGROUNDS['forest'];
-      forestImgEl.src = backgroundImage;
-      console.log('🎨 배경 이미지 설정:', backgroundImage);
+      forestImgEl.src = resolvePath(backgroundImage);
+      console.log('🎨 배경 이미지 설정:', resolvePath(backgroundImage));
     }
     
     // glow 원 초기 크기 설정 (이미지 로드 전에도 초기 크기 표시)

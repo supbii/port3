@@ -598,8 +598,8 @@
       const gridArea = gridWidth * gridHeight;
       
       // 화면 비례 크기 계산 (vw 단위)
-      const minSizeVw = 18; // 최소 크기: 화면 너비의 18% (더 크게)
-      const maxSizeVw = 28; // 최대 크기: 화면 너비의 28% (더 크게)
+      const minSizeVw = 12; // 최소 크기: 화면 너비의 12% (수백 개까지 쌓일 수 있으므로 작게)
+      const maxSizeVw = 24; // 최대 크기: 화면 너비의 24% (전체적으로 살짝 줄임)
       
       let itemSizeVw, maxImgSizeVw;
       
@@ -619,9 +619,17 @@
         // 15~24개: 작아지기 시작
         itemSizeVw = maxSizeVw * 0.6; // 60% 크기
         maxImgSizeVw = maxSizeVw * 0.6;
+      } else if (itemCount < 50) {
+        // 25~49개: 더 작아짐
+        itemSizeVw = maxSizeVw * 0.5; // 50% 크기
+        maxImgSizeVw = maxSizeVw * 0.5;
+      } else if (itemCount < 100) {
+        // 50~99개: 계속 작아짐
+        itemSizeVw = maxSizeVw * 0.4; // 40% 크기
+        maxImgSizeVw = maxSizeVw * 0.4;
       } else {
-        // 25개 이후: 화면의 일정 비율을 채울 수 있도록 크기 계산
-        const targetAreaPerItem = gridArea * 0.08; // 화면 면적의 8%
+        // 100개 이후: 화면의 일정 비율을 채울 수 있도록 크기 계산
+        const targetAreaPerItem = gridArea * 0.06; // 화면 면적의 6%
         const estimatedItemArea = targetAreaPerItem / 1.5; // 여유 공간 1.5배 고려
         const itemSizePx = Math.sqrt(estimatedItemArea); // 정사각형 가정
         // 픽셀을 vw로 변환
@@ -629,7 +637,7 @@
         maxImgSizeVw = itemSizeVw;
         
         // 최소/최대 크기 제한 (vw 단위)
-        itemSizeVw = Math.max(minSizeVw, Math.min(maxSizeVw * 0.5, itemSizeVw));
+        itemSizeVw = Math.max(minSizeVw, Math.min(maxSizeVw * 0.35, itemSizeVw));
         maxImgSizeVw = itemSizeVw;
       }
       

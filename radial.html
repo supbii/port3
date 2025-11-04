@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PORTATO — 라디얼 선택</title>
   <link rel="preconnect" href="https://bks0c7yrb0.execute-api.ap-northeast-2.amazonaws.com">
-  <!-- Sandoll 웹폰트 - <link> 태그로 직접 로드하여 GitHub Pages 호환성 향상 -->
-  <link rel="stylesheet" href="https://bks0c7yrb0.execute-api.ap-northeast-2.amazonaws.com/v1/api/css/drop_fontstream_css/?sid=gAAAAABkPXHo4qvpc1sn4CfuJL52Upc7AT8TVi8zpqX6aZtd3bQar6UDsPKea-00OVjtEVNfrYxuRy0KwyP7evvOGmFn-UJE3J2fgwZrrKxTO78AFSLAqGsk2yWcjZ17eIWeK8W_hEM0WwmzRDJ8PY0OKk9vf2d1gDahwuKJRCRKWS-LyUCxQDP7meUclfmM9WUoaP-N0gjIL5lyx-sFjuMGMGstTkeslXuA25WmkTdqzwQN4zkCffosmIAvef50EDHxTj2cl6OL">
+  <link rel="stylesheet" href="https://bks0c7yrb0.execute-api.ap-northeast-2.amazonaws.com/v1/api/css/drop_fontstream_css/?sid=gAAAAABkPXHo4qvpc1sn4CfuJL52Upc7AT8TVi8zpqX6aZtd3bQar6UDsPKea-00OVjtEVNfrYxuRy0KwyP7evvOGmFn-UJE3J2fgwZrrKxTO78AFSLAqGsk2yWcjZ17eIWeK8W_hEM0WwmzRDJ8PY0OKk9vf2d1gDahwuKJRCRKWS-LyUCxQDP7meUclfmM9WUoaP-N0gjIL5lyx-sFjuMGMGstTkeslXuA25WmkTdqzwQN4zkCffosmIAvef50EDHxTj2cl6OL" charset="utf-8" referrerpolicy="origin">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -147,6 +146,61 @@
   <!-- 푸터 -->
   <div class="footer">© 2025 PORTATO</div>
 
+  <script>
+    // 폰트 로딩 확인 및 적용
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function() {
+        console.log('폰트 로딩 완료');
+        // CSS 변수가 아닌 직접 폰트 이름으로 적용
+        document.body.style.fontFamily = '"Sandoll SuPil", sans-serif';
+        // 모든 텍스트 요소에 폰트 강제 적용
+        document.querySelectorAll('*').forEach(function(el) {
+          const computedStyle = window.getComputedStyle(el);
+          if (computedStyle.fontFamily.includes('Sandoll') || computedStyle.fontFamily.includes('var(--font')) {
+            if (computedStyle.fontFamily.includes('var(--font-main)')) {
+              el.style.fontFamily = '"Sandoll SuPil", sans-serif';
+            } else if (computedStyle.fontFamily.includes('var(--font-sub)')) {
+              el.style.fontFamily = '"Sandoll Gwanghwamun", serif';
+            }
+          }
+        });
+      });
+    } else {
+      // 폰트 로딩 폴백
+      setTimeout(function() {
+        document.body.style.fontFamily = '"Sandoll SuPil", sans-serif';
+        // 모든 요소에 폰트 재적용
+        document.querySelectorAll('*').forEach(function(el) {
+          const computedStyle = window.getComputedStyle(el);
+          if (computedStyle.fontFamily.includes('var(--font')) {
+            if (computedStyle.fontFamily.includes('var(--font-main)')) {
+              el.style.fontFamily = '"Sandoll SuPil", sans-serif';
+            } else if (computedStyle.fontFamily.includes('var(--font-sub)')) {
+              el.style.fontFamily = '"Sandoll Gwanghwamun", serif';
+            }
+          }
+        });
+      }, 1000);
+    }
+    
+    // Font Loading API로 폰트 로딩 확인
+    if (document.fonts && document.fonts.check) {
+      function checkFonts() {
+        const fontsToCheck = [
+          '12px "Sandoll SuPil"',
+          '12px "Sandoll Gwanghwamun"'
+        ];
+        fontsToCheck.forEach(function(font) {
+          if (document.fonts.check(font)) {
+            console.log('폰트 사용 가능:', font);
+          } else {
+            console.warn('폰트 사용 불가:', font);
+          }
+        });
+      }
+      setTimeout(checkFonts, 500);
+    }
+  </script>
   <script src="app.js" defer></script>
 </body>
 </html>

@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PORTATO 커스텀 티켓</title>
   <link rel="preconnect" href="https://bks0c7yrb0.execute-api.ap-northeast-2.amazonaws.com">
-  <!-- Sandoll 웹폰트 - <link> 태그로 직접 로드하여 GitHub Pages 호환성 향상 -->
-  <link rel="stylesheet" href="https://bks0c7yrb0.execute-api.ap-northeast-2.amazonaws.com/v1/api/css/drop_fontstream_css/?sid=gAAAAABkPXHo4qvpc1sn4CfuJL52Upc7AT8TVi8zpqX6aZtd3bQar6UDsPKea-00OVjtEVNfrYxuRy0KwyP7evvOGmFn-UJE3J2fgwZrrKxTO78AFSLAqGsk2yWcjZ17eIWeK8W_hEM0WwmzRDJ8PY0OKk9vf2d1gDahwuKJRCRKWS-LyUCxQDP7meUclfmM9WUoaP-N0gjIL5lyx-sFjuMGMGstTkeslXuA25WmkTdqzwQN4zkCffosmIAvef50EDHxTj2cl6OL">
   <link rel="stylesheet" href="styles.css" />
   <style>
+    /* Sandoll 웹폰트 */
+    @import url('https://bks0c7yrb0.execute-api.ap-northeast-2.amazonaws.com/v1/api/css/drop_fontstream_css/?sid=gAAAAABkPXHo4qvpc1sn4CfuJL52Upc7AT8TVi8zpqX6aZtd3bQar6UDsPKea-00OVjtEVNfrYxuRy0KwyP7evvOGmFn-UJE3J2fgwZrrKxTO78AFSLAqGsk2yWcjZ17eIWeK8W_hEM0WwmzRDJ8PY0OKk9vf2d1gDahwuKJRCRKWS-LyUCxQDP7meUclfmM9WUoaP-N0gjIL5lyx-sFjuMGMGstTkeslXuA25WmkTdqzwQN4zkCffosmIAvef50EDHxTj2cl6OL');
+    
     /* 최소한의 로컬 스타일 (프로젝트 전반 styles.css가 우선) */
     :root { 
       --ink:#ebfeb3; 
@@ -27,7 +28,7 @@
     header.site-header{position:absolute; top:0; left:0; z-index:20;}
     .logo-container{position:fixed; top:3.5vh; left:3.5vw; width:clamp(4vw,7vw,9vw); height:auto; z-index:1400; pointer-events:none; user-select:none;}
     .logo-base{display:block;width:100%;height:auto;pointer-events:none;user-select:none;position:relative;mix-blend-mode:multiply;}
-    main.app{flex:1; width:100%; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:1vw; padding:4vh 0 0 0; box-sizing:border-box; z-index:12;}
+    main.app{flex:1; width:100%; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:0.5vw; padding:1vh 0 0 0; box-sizing:border-box; z-index:12;}
 
     .title-box{background:rgba(60,108,113,0.3); border-radius:1.5vw; padding:1.5vw 2.5vw; margin-bottom:0; max-width:fit-content; text-align:center;}
     h2.result-title{margin:0; font-size:clamp(2.5vw,4vmin,3.5vw); color:var(--ink); text-align:center; font-weight:700;}
@@ -54,7 +55,7 @@
     }
     
 
-    .ticket-wrap{position:relative; display:flex; align-items:center; justify-content:center; width:80vw; height:35vw; overflow:hidden;}
+         .ticket-wrap{position:relative; display:flex; align-items:center; justify-content:center; width:80vw; height:35vw; overflow:hidden; transform: scale(0.72); transform-origin: center center;}
     
     /* 티켓 백그라운드를 컨테이너로 설정 - overflow 제어 */
     .ticket-background{
@@ -165,10 +166,10 @@
     
     @keyframes glowPulse {
       0%, 100% {
-        transform: scale(0.95); /* 작아지는 크기를 더 작게 (1 → 0.95) */
+        transform: translateY(-50%) scale(0.95); /* translateY 유지하면서 scale 적용 */
       }
       50% {
-        transform: scale(1.15); /* 더 크게 변화 */
+        transform: translateY(-50%) scale(1.15); /* translateY 유지하면서 scale 적용 */
       }
     }
     
@@ -184,19 +185,19 @@
     .ticket-content img{object-fit:contain; pointer-events:none; display:block;}
     .ticket-content .draggable-img{width: auto; height: auto;}
 
-    .ticket-footer{display:flex; gap:2vw; align-items:center; justify-content:flex-start; margin-top:1.5vh; margin-bottom:1vh; z-index:12; position:relative; padding-left:0; width:80vw; margin-left:auto; margin-right:auto;}
-    .ticket-footer img.btn-img{height:3.5vw !important; max-height:3.5vw !important; min-height:3.5vw !important; cursor:pointer; display:block; width:auto; object-fit:contain; vertical-align:middle;}
-    .ticket-footer img#btnReset{height:2.8vw !important; max-height:2.8vw !important; min-height:2.8vw !important; vertical-align:middle; margin-left:10vw;}
-    .ticket-footer .footer-buttons-right{display:flex; gap:2vw; align-items:center; margin-left:auto; margin-right:auto;}
+    .ticket-footer{display:flex !important; gap:6vw !important; align-items:center !important; justify-content:center !important; margin-top:-7vh !important; margin-bottom:0 !important; z-index:12 !important; position:relative !important; padding:0 !important; width:80vw !important; max-width:80vw !important; margin-left:auto !important; margin-right:auto !important; box-sizing:border-box !important;}
+    .ticket-footer img.btn-img{height:2.5vw !important; max-height:2.5vw !important; min-height:2.5vw !important; cursor:pointer !important; display:block !important; width:auto !important; object-fit:contain !important; vertical-align:middle !important;}
+    .ticket-footer img#btnReset{height:2.0vw !important; max-height:2.0vw !important; min-height:2.0vw !important; vertical-align:middle !important; margin-left:0 !important; margin-right:0 !important; flex-shrink:0 !important; flex-grow:0 !important;}
+    .ticket-footer .footer-buttons-right{display:flex !important; gap:1.2vw !important; align-items:center !important; margin-left:0 !important; margin-right:0 !important; flex-shrink:0 !important; flex-grow:0 !important;}
 
     .controls { display:flex; gap:1.2vw; align-items:center; justify-content:center; margin-top:1.2vw; z-index:12;}
     .controls a, .controls button { background:transparent; border:0; color:var(--ink); cursor:pointer; font-size:clamp(0.8vw,1.4vmin,1.2vw); padding:0.45vw 0.8vw; border-radius:0.8vw; }
 
     footer.site-footer{position:fixed; bottom:2vh; left:50%; transform:translateX(-50%); font-size:1vw; opacity:.9; z-index:21; margin:0; color:var(--ink); text-align:center; font-family:var(--font-sub);}
 
-    /* small screens */
-    @media (max-width:600px){
-      .ticket-wrap{width:90vw; height:40vw; overflow:hidden;}
+          /* small screens */
+      @media (max-width:600px){
+       .ticket-wrap{width:90vw; height:40vw; overflow:hidden; transform: scale(0.72); transform-origin: center center;}
       .ticket-background{width:100%; height:100%;}
       /* 모바일에서도 데스크톱과 동일한 배치 (비율 유지) */
       .forest-image{width:45%; height:60%; left:5%; bottom:5%; max-width:calc(100% - 10%); max-height:calc(100% - 10%);}
@@ -559,28 +560,18 @@ function updateRightCircleGlowSize() {
     return;
   }
   
-  // right_circle보다 약간 더 크게 (110% 정도 - 115%에서 110%로 줄임)
+  // right_circle보다 약간 더 크게 (110% 정도)
   const glowSize = Math.max(rightCircleRect.width, rightCircleRect.height) * 1.10;
   
-  // right_circle의 위치와 동일하게 설정
-  const ticketWrap = rightCircleEl.closest('.ticket-wrap');
-  if (ticketWrap) {
-    const ticketWrapRect = ticketWrap.getBoundingClientRect();
-    const rightCircleLeft = rightCircleRect.left - ticketWrapRect.left;
-    const rightCircleTop = rightCircleRect.top - ticketWrapRect.top;
-    const rightCircleCenterX = rightCircleLeft + rightCircleRect.width / 2;
-    const rightCircleCenterY = rightCircleTop + rightCircleRect.height / 2;
-    
-    // glow 원을 right_circle 중심에 맞춰 배치
-    rightCircleGlowEl.style.left = 'auto';
-    rightCircleGlowEl.style.right = 'auto';
-    rightCircleGlowEl.style.top = 'auto';
-    rightCircleGlowEl.style.left = (rightCircleCenterX - glowSize / 2) + 'px';
-    rightCircleGlowEl.style.top = (rightCircleCenterY - glowSize / 2) + 'px';
-    // transform은 애니메이션에서 사용하므로 제거하지 않음 (중심 기준으로 scale 적용)
-    rightCircleGlowEl.style.transformOrigin = 'center center';
-  }
-  
+  // right_circle와 동일한 CSS 방식으로 배치 (right:15%; top:55%; transform:translateY(-50%))
+  rightCircleGlowEl.style.position = 'absolute';
+  rightCircleGlowEl.style.right = '15%';
+  rightCircleGlowEl.style.top = '55%';
+  rightCircleGlowEl.style.transform = 'translateY(-50%)'; // 애니메이션에서 scale과 결합됨
+  rightCircleGlowEl.style.left = 'auto';
+  rightCircleGlowEl.style.bottom = 'auto';
+  rightCircleGlowEl.style.margin = '0';
+  rightCircleGlowEl.style.transformOrigin = 'center center';
   rightCircleGlowEl.style.width = glowSize + 'px';
   rightCircleGlowEl.style.height = glowSize + 'px';
   
@@ -598,6 +589,76 @@ function updateRightCircleGlowSize() {
     background: computedStyle.background
   });
 }
+// 티켓 푸터 버튼 스타일 강제 적용
+function applyTicketFooterStyles() {
+  const ticketFooter = document.querySelector('.ticket-footer');
+  if (ticketFooter) {
+    ticketFooter.style.setProperty('display', 'flex', 'important');
+    ticketFooter.style.setProperty('gap', '6vw', 'important'); // 갭 더 증가 (4vw → 6vw)
+    ticketFooter.style.setProperty('align-items', 'center', 'important');
+    ticketFooter.style.setProperty('justify-content', 'center', 'important');
+    ticketFooter.style.setProperty('margin-top', '-7vh', 'important'); // 더 위로 올림 (-5vh → -7vh)
+    ticketFooter.style.setProperty('margin-bottom', '0', 'important');
+    ticketFooter.style.setProperty('z-index', '12', 'important');
+    ticketFooter.style.setProperty('position', 'relative', 'important');
+    ticketFooter.style.setProperty('padding', '0', 'important');
+    ticketFooter.style.setProperty('width', '80vw', 'important');
+    ticketFooter.style.setProperty('max-width', '80vw', 'important');
+    ticketFooter.style.setProperty('margin-left', 'auto', 'important');
+    ticketFooter.style.setProperty('margin-right', 'auto', 'important');
+    ticketFooter.style.setProperty('box-sizing', 'border-box', 'important');
+  }
+  
+  const btnReset = document.getElementById('btnReset');
+  if (btnReset) {
+    btnReset.style.setProperty('height', '2.0vw', 'important');
+    btnReset.style.setProperty('max-height', '2.0vw', 'important');
+    btnReset.style.setProperty('min-height', '2.0vw', 'important');
+    btnReset.style.setProperty('margin-left', '0', 'important');
+    btnReset.style.setProperty('margin-right', '0', 'important');
+    btnReset.style.setProperty('flex-shrink', '0', 'important');
+    btnReset.style.setProperty('flex-grow', '0', 'important');
+  }
+  
+  const footerButtonsRight = document.querySelector('.ticket-footer .footer-buttons-right');
+  if (footerButtonsRight) {
+    footerButtonsRight.style.setProperty('display', 'flex', 'important');
+    footerButtonsRight.style.setProperty('gap', '1.2vw', 'important');
+    footerButtonsRight.style.setProperty('align-items', 'center', 'important');
+    footerButtonsRight.style.setProperty('margin-left', '0', 'important');
+    footerButtonsRight.style.setProperty('margin-right', '0', 'important');
+    footerButtonsRight.style.setProperty('flex-shrink', '0', 'important');
+    footerButtonsRight.style.setProperty('flex-grow', '0', 'important');
+  }
+  
+  const btnImgs = document.querySelectorAll('.ticket-footer img.btn-img');
+  btnImgs.forEach(btn => {
+    if (btn.id !== 'btnReset') {
+      btn.style.setProperty('height', '2.5vw', 'important');
+      btn.style.setProperty('max-height', '2.5vw', 'important');
+      btn.style.setProperty('min-height', '2.5vw', 'important');
+    }
+  });
+}
+
+// 페이지 로드 후 스타일 적용
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', applyTicketFooterStyles);
+} else {
+  applyTicketFooterStyles();
+}
+
+// 여러 번 재적용하여 확실하게 적용
+setTimeout(applyTicketFooterStyles, 100);
+setTimeout(applyTicketFooterStyles, 500);
+setTimeout(applyTicketFooterStyles, 1000);
+setTimeout(applyTicketFooterStyles, 2000);
+
+window.addEventListener('load', () => {
+  setTimeout(applyTicketFooterStyles, 100);
+  setTimeout(applyTicketFooterStyles, 500);
+});
+
 const btnReset = document.getElementById('btnReset');
 const btnReselect = document.getElementById('btnReselect');
 const btnUseTicket = document.getElementById('btnUseTicket');
@@ -641,12 +702,14 @@ console.log('selections 키들:', Object.keys(selections));
 // helper: 안전한 이미지 로드 (Image 객체 -> Promise)
 function loadImage(src){
   return new Promise((resolve) => {
-    // file:// 프로토콜에서는 CORS 설정이 작동하지 않으므로, 
-    // 이미지를 canvas에 그릴 때 blob으로 변환하여 사용
     const img = new Image();
-    // crossOrigin 문제 방지를 위해 crossOrigin을 설정하지 않음
-    img.onload = ()=> resolve(img);
-    img.onerror = ()=> {
+    // file:// 프로토콜에서는 crossOrigin을 설정하지 않음 (설정하면 로드 실패)
+    // http/https에서는 crossOrigin 설정하여 CORS 문제 방지
+    if (window.location.protocol !== 'file:') {
+      img.crossOrigin = 'anonymous';
+    }
+    img.onload = () => resolve(img);
+    img.onerror = () => {
       console.warn("이미지 로드 실패:", src);
       resolve(null);
     };
@@ -1042,32 +1105,55 @@ async function composeTicketDataURL(){
 
   console.log('🎨 티켓 캔버스 생성 완료');
   
-  // file:// 프로토콜에서 toDataURL이 막힐 수 있으므로 항상 toBlob 사용
-  // CORS 문제 방지를 위해 toBlob을 직접 사용
+  // CORS 문제 방지: file:// 프로토콜에서는 allowTaint 필요
+  // http/https에서는 crossOrigin으로 처리
+  const isFileProtocol = window.location.protocol === 'file:';
+  
   return new Promise((resolve, reject) => {
     try {
-      cvs.toBlob((blob) => {
-        if (!blob) {
-          // toBlob 실패 시 toDataURL 시도
-          try {
-            const dataURL = cvs.toDataURL('image/png');
-            resolve(dataURL);
-          } catch (dataURLError) {
-            console.error('❌ toBlob과 toDataURL 모두 실패:', dataURLError);
-            reject(new Error('이미지 변환 실패'));
-          }
-          return;
+      // file:// 프로토콜에서는 tainted canvas 문제가 있지만, 일단 시도
+      if (isFileProtocol) {
+        // file://에서는 toDataURL만 사용 가능 (CORS 오류 발생 가능하지만 시도)
+        try {
+          const dataURL = cvs.toDataURL('image/png');
+          resolve(dataURL);
+        } catch (dataURLError) {
+          // file://에서는 CORS 오류가 정상이므로 경고만 출력하고 빈 이미지 반환
+          console.warn('⚠️ file:// 프로토콜에서는 toDataURL 사용 불가 (정상 동작). 빈 이미지 반환:', dataURLError.message);
+          // 빈 canvas로 대체
+          const emptyCanvas = document.createElement('canvas');
+          emptyCanvas.width = cvs.width;
+          emptyCanvas.height = cvs.height;
+          const emptyCtx = emptyCanvas.getContext('2d');
+          emptyCtx.fillStyle = '#ffffff';
+          emptyCtx.fillRect(0, 0, emptyCanvas.width, emptyCanvas.height);
+          resolve(emptyCanvas.toDataURL('image/png'));
         }
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = () => {
-          console.error('❌ FileReader 실패:', reader.error);
-          reject(reader.error);
-        };
-        reader.readAsDataURL(blob);
-      }, 'image/png');
+      } else {
+        // http/https에서는 toBlob 사용
+        cvs.toBlob((blob) => {
+          if (!blob) {
+            // toBlob 실패 시 toDataURL 시도
+            try {
+              const dataURL = cvs.toDataURL('image/png');
+              resolve(dataURL);
+            } catch (dataURLError) {
+              console.error('❌ toBlob과 toDataURL 모두 실패:', dataURLError);
+              reject(new Error('이미지 변환 실패'));
+            }
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => {
+            console.error('❌ FileReader 실패:', reader.error);
+            reject(reader.error);
+          };
+          reader.readAsDataURL(blob);
+        }, 'image/png');
+      }
     } catch (error) {
-      console.warn('⚠️ toBlob 호출 실패, toDataURL 시도:', error);
+      console.warn('⚠️ 이미지 변환 실패, toDataURL 시도:', error);
       try {
         const dataURL = cvs.toDataURL('image/png');
         resolve(dataURL);
@@ -2830,8 +2916,8 @@ function showQRForDataURL(dataURL){
     console.log(`  - 경계: left=${circleLeft.toFixed(1)}, right=${circleRight.toFixed(1)}, top=${circleTop.toFixed(1)}, bottom=${circleBottom.toFixed(1)}`);
     console.log(`  - 중심: (${circleCenterX.toFixed(1)}, ${circleCenterY.toFixed(1)})`);
     
-    // right_circle 내부 여백 (그래픽이 경계에 닿지 않도록 - 더 크게)
-    const padding = Math.min(circleWidth, circleHeight) * 0.20; // 20% 여백으로 증가
+    // right_circle 내부 여백 (드래그 가능한 범위를 적절하게)
+    const padding = Math.min(circleWidth, circleHeight) * 0.05; // 5% 여백 (더 넓은 드래그 범위)
     
     // 실제 사용 가능한 영역 계산
     const usableLeft = circleLeft + padding;
@@ -2842,6 +2928,10 @@ function showQRForDataURL(dataURL){
     const usableHeight = usableBottom - usableTop;
     
     console.log(`📐 사용 가능한 영역: ${usableWidth.toFixed(1)}px × ${usableHeight.toFixed(1)}px`);
+    
+    // 사용 가능한 영역의 중심 계산
+    const usableCenterX = usableLeft + usableWidth / 2;
+    const usableCenterY = usableTop + usableHeight / 2;
     
     // 악기 그래픽과 일반 그래픽 분리
     const instrumentImages = [];
@@ -2860,27 +2950,53 @@ function showQRForDataURL(dataURL){
     
     console.log(`📦 악기 그래픽: ${instrumentImages.length}개, 일반 그래픽: ${regularImages.length}개`);
     
-    // 일반 그래픽은 사분면 배치
-    const usableCenterX = usableLeft + usableWidth / 2;
-    const usableCenterY = usableTop + usableHeight / 2;
+    // 일반 그래픽은 사분면 배치 (원의 중심 기준 각도와 거리로 정의)
+    const circleRadius = Math.min(circleWidth, circleHeight) / 2;
+    
+    // 화면 크기에 따라 그래픽 크기 조정 (큰 화면일수록 더 크게)
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const viewportSize = Math.min(viewportWidth, viewportHeight);
+    
+    // 화면 크기에 따른 스케일 팩터 (기준: 1920x1080, 작은 화면에서도 충분히 크게)
+    // 화면이 클수록 더 큰 그래픽 표시
+    let sizeMultiplier = 1.0;
+    if (viewportSize >= 1920) {
+      sizeMultiplier = 1.5; // 매우 큰 화면: 1.5배
+    } else if (viewportSize >= 1440) {
+      sizeMultiplier = 1.3; // 큰 화면: 1.3배
+    } else if (viewportSize >= 1024) {
+      sizeMultiplier = 1.1; // 중간 화면: 1.1배
+    }
+    // 작은 화면은 기본값 1.0 사용
+    
+    console.log(`📐 화면 크기: ${viewportWidth}x${viewportHeight}, viewportSize: ${viewportSize}, sizeMultiplier: ${sizeMultiplier}`);
+    
+    // 사분면 위치는 동적으로 조정되므로 초기 위치는 중앙에 가깝게 설정
+    // 실제 위치는 그래픽 크기에 따라 자동 조정됨
+    const quadrantRadius = circleRadius * 0.05; // 원 중심에서 5% 거리에 배치 (초기 위치, 크기에 따라 자동 조정됨)
+    
+    // 각 사분면의 중심 각도 (도 단위, 0도 = 오른쪽, 시계 방향)
+    const quadrantAngles = [
+      Math.PI * 0.75,  // NE (우상단): 270도 = -90도 또는 270도 (위쪽)
+      Math.PI * 0.25,  // NW (좌상단): 90도 (왼쪽 위)
+      Math.PI * 1.25,  // SW (좌하단): 225도 (왼쪽 아래)
+      Math.PI * 1.75   // SE (우하단): 315도 (오른쪽 아래)
+    ];
+    
+    // 사분면 위치 계산 함수 (각도와 거리 기반)
+    const getQuadrantPosition = (quadrantIndex) => {
+      const angle = quadrantAngles[quadrantIndex];
+      const x = circleCenterX + Math.cos(angle) * quadrantRadius;
+      const y = circleCenterY + Math.sin(angle) * quadrantRadius;
+      return { x, y };
+    };
     
     const quadrantPositions = [
-      { // NE (우상단) - 중심 기준 우상단 (위로 올림)
-        x: usableCenterX + usableWidth * 0.68,  // 중심에서 오른쪽으로 68%
-        y: usableCenterY - usableHeight * 0.55  // 중심에서 위로 55% (65% → 55%, 더 위로 올림)
-      },
-      { // NW (좌상단) - 중심 기준 좌상단 (위로 올림)
-        x: usableCenterX - usableWidth * 0.68,  // 중심에서 왼쪽으로 68%
-        y: usableCenterY - usableHeight * 0.55  // 중심에서 위로 55% (65% → 55%, 더 위로 올림)
-      },
-      { // SE (우하단) - 중심 기준 우하단 (위로 올림, 하지만 악기보다는 위)
-        x: usableCenterX + usableWidth * 0.68,  // 중심에서 오른쪽으로 68%
-        y: usableCenterY + usableHeight * 0.30  // 중심에서 아래로 30% (40% → 30%, 더 위로 올림)
-      },
-      { // SW (좌하단) - 중심 기준 좌하단 (위로 올림, 하지만 악기보다는 위)
-        x: usableCenterX - usableWidth * 0.68,  // 중심에서 왼쪽으로 68%
-        y: usableCenterY + usableHeight * 0.30  // 중심에서 아래로 30% (40% → 30%, 더 위로 올림)
-      }
+      getQuadrantPosition(0), // NE
+      getQuadrantPosition(1), // NW
+      getQuadrantPosition(2), // SW
+      getQuadrantPosition(3)  // SE
     ];
     
     // 악기 그래픽은 일렬 배치 (일반 그래픽 하단보다 아래) - 더 내려서 일반 그래픽 하단과 명확히 구분
@@ -2907,13 +3023,14 @@ function showQRForDataURL(dataURL){
     // right_circle 크기에 비례한 최대 이미지 크기 계산 (써클 크기에 비례)
     // 써클 크기의 일정 비율로 제한 (그래픽 크기 50% 보장을 위해 충분한 여유)
     const circleReferenceSize = Math.min(circleWidth, circleHeight);
-    const maxImageSize = circleReferenceSize * 0.65; // 써클 크기의 65%로 제한 (크기 보장)
+    const maxImageSize = circleReferenceSize * 0.80; // 써클 크기의 80%로 제한 (더 크게)
+    const maxSizeByCircle = circleReferenceSize * 0.80; // 간격 계산용 최대 크기
     
     console.log(`📐 최대 이미지 크기: ${maxImageSize.toFixed(1)}px`);
     
     // 일반 그래픽 사분면 배치
     regularImages.forEach((img, index) => {
-      console.log(`📦 ${index + 1}번째 이미지 처리:`, img.src.split('/').pop());
+      console.log(`📦 ${index + 1}번째 일반 그래픽 처리:`, img.src.split('/').pop());
       
       // 이미지가 완전히 로드될 때까지 기다린 후 크기 확인
       const updateImagePosition = () => {
@@ -2923,134 +3040,319 @@ function showQRForDataURL(dataURL){
           return;
         }
         
-        // 초기 위치가 이미 설정되었고, 사용자가 직접 드래그한 경우 위치 재설정하지 않음
-        if (img.dataset.initialPositionSet === 'true' && img.dataset.userMoved === 'true') {
+        // 사용자가 직접 드래그한 경우에만 위치 재설정하지 않음 (초기 로드 시에는 항상 배치)
+        if (img.dataset.userMoved === 'true') {
           console.log('⏭️ 사용자가 직접 이동시킨 이미지 - 위치 재설정 건너뜀');
           return;
         }
+        
         // 사분면 위치 결정 (최대 4개까지, 그 이후는 순환)
         const quadrantIndex = index % 4;
-        const pos = quadrantPositions[quadrantIndex];
+        const quadrantNames = ['NE', 'NW', 'SE', 'SW'];
+        const targetQuadrant = quadrantPositions[quadrantIndex];
+        
+        console.log(`  🎯 사분면 ${quadrantNames[quadrantIndex]}에 배치`);
         
         // 원본 이미지 크기
         const originalWidth = img.naturalWidth;
         const originalHeight = img.naturalHeight;
         const aspectRatio = originalHeight / originalWidth;
         
-        // right_circle 크기에 비례한 크기 계산 (써클 크기에 비례하여 자동 조정)
-        // right_circle의 작은 변(너비 또는 높이)을 기준으로 비율 계산
-        const circleReferenceSize = Math.min(circleWidth, circleHeight);
+        // 그래픽 크기를 적절하게 설정 (원 안에 들어가면서도 드래그 범위 확보)
+        // 화면 크기에 따라 동적으로 조정 (큰 화면일수록 더 크게)
+        // 기본: 원 반지름의 70%, 화면 크기에 따라 최대 80%까지 증가
+        const baseMaxHalfDiagonal = circleRadius * 0.70; // 기본: 원 반지름의 70% (크기 축소)
+        const maxHalfDiagonal = baseMaxHalfDiagonal * sizeMultiplier; // 화면 크기에 따라 조정
         
-        // baseScale을 써클 크기에 비례하도록 계산
-        const baseScale = img.dataset.scale ? parseFloat(img.dataset.scale) : 0.5;
-        // 써클 크기의 일정 비율을 차지하도록 설정 (일반 그래픽 크기 조정, 간격 유지)
-        const targetSizeRatio = circleReferenceSize * 0.45; // 써클 크기의 45%를 차지 (간격 확보)
-        const targetSize = targetSizeRatio;
+        // 최대 제한: 원 반지름의 80%를 넘지 않도록 (드래그 범위 확보)
+        const maxAllowedHalfDiagonal = circleRadius * 0.80;
+        const finalMaxHalfDiagonal = Math.min(maxHalfDiagonal, maxAllowedHalfDiagonal);
         
-        // 원본 이미지 비율 유지하면서 targetSize에 맞추기
-        let targetWidth, targetHeight;
-        if (originalWidth > originalHeight) {
-          // 가로가 더 긴 경우
-          targetWidth = targetSize;
-          targetHeight = targetSize * aspectRatio;
-        } else {
-          // 세로가 더 긴 경우
-          targetHeight = targetSize;
-          targetWidth = targetSize / aspectRatio;
-        }
+        console.log(`  🔍 크기 계산 시작: circleRadius=${circleRadius.toFixed(1)}px, baseMaxHalfDiagonal=${baseMaxHalfDiagonal.toFixed(1)}px, sizeMultiplier=${sizeMultiplier}, finalMaxHalfDiagonal=${finalMaxHalfDiagonal.toFixed(1)}px`);
+        console.log(`  🔍 원본 이미지 크기: ${originalWidth}px × ${originalHeight}px`);
         
-        // 최대 크기 제한 (절대적인 제한)
-        if (targetWidth > maxImageSize || targetHeight > maxImageSize) {
-          const scaleByWidth = maxImageSize / targetWidth;
-          const scaleByHeight = maxImageSize / targetHeight;
-          const finalScale = Math.min(scaleByWidth, scaleByHeight);
+        // 원본 이미지 크기로부터 목표 크기 계산 (4배 스케일 적용, 화면 크기 고려)
+        const originalDiagonal = Math.sqrt(originalWidth ** 2 + originalHeight ** 2);
+        const baseScaleRatio = (finalMaxHalfDiagonal * 2) / originalDiagonal; // halfDiagonal * 2 = 전체 대각선
+        const scaleRatio = baseScaleRatio * 4.0 * sizeMultiplier; // 4배 크기 + 화면 크기 배수 적용 (크기 축소)
+        
+        console.log(`  🔍 원본 대각선: ${originalDiagonal.toFixed(1)}px, baseScaleRatio: ${baseScaleRatio.toFixed(4)}, 최종 scaleRatio (4배): ${scaleRatio.toFixed(4)}`);
+        
+        let targetWidth = originalWidth * scaleRatio;
+        let targetHeight = originalHeight * scaleRatio;
+        
+        // 최종 확인: halfDiagonal이 finalMaxHalfDiagonal 이하인지 확인
+        let halfWidth = targetWidth / 2;
+        let halfHeight = targetHeight / 2;
+        let imageHalfDiagonal = Math.sqrt(halfWidth ** 2 + halfHeight ** 2);
+        
+        console.log(`  🔍 초기 계산: targetWidth=${targetWidth.toFixed(1)}px, targetHeight=${targetHeight.toFixed(1)}px, imageHalfDiagonal=${imageHalfDiagonal.toFixed(1)}px, finalMaxHalfDiagonal=${finalMaxHalfDiagonal.toFixed(1)}px`);
+        
+        // 크기가 너무 크면 조정 (하지만 최대한 크게 유지)
+        if (imageHalfDiagonal > finalMaxHalfDiagonal) {
+          const finalScale = finalMaxHalfDiagonal / imageHalfDiagonal;
           targetWidth *= finalScale;
           targetHeight *= finalScale;
+          halfWidth = targetWidth / 2;
+          halfHeight = targetHeight / 2;
+          imageHalfDiagonal = Math.sqrt(halfWidth ** 2 + halfHeight ** 2);
+          console.log(`  ⚠️ 그래픽 크기 제한: halfDiagonal ${imageHalfDiagonal.toFixed(1)}px (원 반지름의 ${(imageHalfDiagonal / circleRadius * 100).toFixed(1)}%)`);
         }
         
-        // 반드시 사용 가능한 영역 내에 들어가도록 추가 검증
-        const halfWidth = targetWidth / 2;
-        const halfHeight = targetHeight / 2;
+        console.log(`  📏 최종 그래픽 크기: ${targetWidth.toFixed(1)}px × ${targetHeight.toFixed(1)}px, halfDiagonal: ${imageHalfDiagonal.toFixed(1)}px (원 반지름의 ${(imageHalfDiagonal / circleRadius * 100).toFixed(1)}%)`);
+        console.log(`  ✅ 실제 적용될 크기: width=${targetWidth.toFixed(1)}px, height=${targetHeight.toFixed(1)}px`);
         
-        // 최종 검증: 써클 크기 기준으로 계산한 크기를 우선하되, 써클 경계를 넘지 않도록만 체크
-        // 써클의 실제 크기(원형 경계 고려)로 최대 크기 확인 (그래픽 크기 50% 보장 + 간격 확보)
-        // 50% 크기의 대각선 = 50% * sqrt(2) ≈ 0.707, 따라서 충분한 여유 필요
-        const maxSizeByCircle = circleReferenceSize * 0.85; // 써클 크기의 85%까지만 허용 (크기 제한 완화)
-        const maxDiagonal = Math.sqrt(targetWidth ** 2 + targetHeight ** 2);
-        if (maxDiagonal > maxSizeByCircle) {
-          const scale = maxSizeByCircle / maxDiagonal;
+        // 사분면 위치를 먼저 설정하되, 그래픽 크기를 고려하여 동적으로 조정
+        let finalX = targetQuadrant.x;
+        let finalY = targetQuadrant.y;
+        
+        // 사분면 위치가 그래픽 크기를 고려했을 때 원 안에 들어가는지 확인
+        // 크기가 크면 사분면 위치도 중앙으로 더 가까이 조정
+        // 화면 크기에 따라 안전 마진도 조정 (큰 화면에서는 더 작은 마진으로 더 크게)
+        const safetyMargin = viewportSize >= 1440 ? 2 : 3; // 큰 화면에서는 더 작은 마진
+        const centerDistance = Math.sqrt((finalX - circleCenterX) ** 2 + (finalY - circleCenterY) ** 2);
+        const maxSafeDistance = Math.max(0, circleRadius - imageHalfDiagonal - safetyMargin);
+        
+        // 사분면 위치를 유지하되, 원 안에 들어가도록 조정
+        if (centerDistance + imageHalfDiagonal > circleRadius - safetyMargin) {
+          // 사분면 방향은 유지하되 거리만 조정
+          const angle = Math.atan2(finalY - circleCenterY, finalX - circleCenterX);
+          // 안전 거리로 위치 조정 (최소한 원 중심에 가깝게)
+          finalX = circleCenterX + Math.cos(angle) * maxSafeDistance;
+          finalY = circleCenterY + Math.sin(angle) * maxSafeDistance;
+          console.log(`  🔄 사분면 위치 조정 (크기 고려): ${targetQuadrant.x.toFixed(1)}, ${targetQuadrant.y.toFixed(1)} → ${finalX.toFixed(1)}, ${finalY.toFixed(1)} (거리: ${centerDistance.toFixed(1)} → ${maxSafeDistance.toFixed(1)})`);
+        } else {
+          console.log(`  ✅ 사분면 위치 유지: ${finalX.toFixed(1)}, ${finalY.toFixed(1)} (거리: ${centerDistance.toFixed(1)}, 안전 거리: ${maxSafeDistance.toFixed(1)})`);
+        }
+        
+        // 같은 사분면에 여러 개가 있을 때만 간격 조정 (간단하게)
+        const minSpacing = circleRadius * 0.15; // 최소 간격 (circleReferenceSize 대신 circleRadius 사용)
+        for (let i = 0; i < index; i++) {
+          const prevImg = regularImages[i];
+          if (!prevImg) continue;
+          
+          const prevQuadrantIndex = i % 4;
+          // 같은 사분면에 있는 그래픽만 간격 체크
+          if (prevQuadrantIndex !== quadrantIndex) continue;
+          
+          // 이전 그래픽의 크기 계산
+          const prevOriginalWidth = prevImg.naturalWidth;
+          const prevOriginalHeight = prevImg.naturalHeight;
+          const prevAspectRatio = prevOriginalHeight / prevOriginalWidth;
+          const prevBaseScale = prevImg.dataset.scale ? parseFloat(prevImg.dataset.scale) : 0.5;
+          const prevSizeMultiplier = prevBaseScale >= 1.0 ? 1.50 : 1.30; // 일반 그래픽 크기 대폭 증가
+          const prevBaseSizeRatio = prevSizeMultiplier * prevBaseScale;
+          const prevTargetSizeRatio = circleReferenceSize * prevBaseSizeRatio;
+          
+          let prevTargetWidth, prevTargetHeight;
+          if (prevOriginalWidth > prevOriginalHeight) {
+            prevTargetWidth = prevTargetSizeRatio;
+            prevTargetHeight = prevTargetSizeRatio * prevAspectRatio;
+          } else {
+            prevTargetHeight = prevTargetSizeRatio;
+            prevTargetWidth = prevTargetSizeRatio / prevAspectRatio;
+          }
+          
+          const prevMaxDiagonal = Math.sqrt(prevTargetWidth ** 2 + prevTargetHeight ** 2);
+          if (prevMaxDiagonal > maxSizeByCircle) {
+            const scale = maxSizeByCircle / prevMaxDiagonal;
+            prevTargetWidth *= scale;
+            prevTargetHeight *= scale;
+          }
+          
+          const prevHalfWidth = prevTargetWidth / 2;
+          const prevHalfHeight = prevTargetHeight / 2;
+          const prevPos = quadrantPositions[prevQuadrantIndex];
+          
+          // 같은 사분면 내에서 간격 확보 (방향 유지)
+          const dx = finalX - prevPos.x;
+          const dy = finalY - prevPos.y;
+          const distance = Math.sqrt(dx ** 2 + dy ** 2);
+          const requiredDistance = Math.sqrt(halfWidth ** 2 + halfHeight ** 2) + 
+                                   Math.sqrt(prevHalfWidth ** 2 + prevHalfHeight ** 2) + 
+                                   minSpacing;
+          
+          if (distance < requiredDistance && distance > 0) {
+            // 원래 방향을 유지하면서 간격만 확보
+            const angle = Math.atan2(dy, dx);
+            const adjustedX = prevPos.x + Math.cos(angle) * requiredDistance;
+            const adjustedY = prevPos.y + Math.sin(angle) * requiredDistance;
+            
+            // 조정된 위치가 원형 경계 내부인지 확인 (모든 모서리 체크)
+            const adjustedCorners = [
+              { x: adjustedX - halfWidth, y: adjustedY - halfHeight },
+              { x: adjustedX + halfWidth, y: adjustedY - halfHeight },
+              { x: adjustedX - halfWidth, y: adjustedY + halfHeight },
+              { x: adjustedX + halfWidth, y: adjustedY + halfHeight }
+            ];
+            
+            let allCornersInside = true;
+            for (const corner of adjustedCorners) {
+              const distanceFromCenter = Math.sqrt((corner.x - circleCenterX) ** 2 + (corner.y - circleCenterY) ** 2);
+              if (distanceFromCenter > circleRadius - 3) {
+                allCornersInside = false;
+                break;
+              }
+            }
+            
+            if (allCornersInside) {
+              finalX = adjustedX;
+              finalY = adjustedY;
+              console.log(`  🔄 같은 사분면 내 간격 조정: ${targetQuadrant.x.toFixed(1)}, ${targetQuadrant.y.toFixed(1)} → ${finalX.toFixed(1)}, ${finalY.toFixed(1)}`);
+            } else {
+              console.log(`  ⚠️ 간격 조정 취소: 원형 경계를 넘음`);
+            }
+          }
+        }
+        
+        // 원형 경계 체크 (매우 엄격하게 - 그래픽의 모든 모서리가 원 안에 있는지 확인)
+        const imageCorners = [
+          { x: finalX - halfWidth, y: finalY - halfHeight }, // 좌상단
+          { x: finalX + halfWidth, y: finalY - halfHeight }, // 우상단
+          { x: finalX - halfWidth, y: finalY + halfHeight }, // 좌하단
+          { x: finalX + halfWidth, y: finalY + halfHeight }  // 우하단
+        ];
+        
+        let needsAdjustment = false;
+        
+        // 모든 모서리가 원 안에 있는지 확인 (안전 마진 3px, 그래픽 크게 유지)
+        for (const corner of imageCorners) {
+          const distanceFromCenter = Math.sqrt((corner.x - circleCenterX) ** 2 + (corner.y - circleCenterY) ** 2);
+          if (distanceFromCenter > circleRadius - 3) {
+            needsAdjustment = true;
+            break;
+          }
+        }
+        
+        if (needsAdjustment) {
+          // 원형 경계 내로 조정 (그래픽의 중심점이 원 안에 들어가도록)
+          // 사분면 방향은 유지하되 거리만 조정
+          const centerDistance = Math.sqrt((finalX - circleCenterX) ** 2 + (finalY - circleCenterY) ** 2);
+          const angle = Math.atan2(finalY - circleCenterY, finalX - circleCenterX);
+          const safeDistance = Math.max(0, circleRadius - imageHalfDiagonal - 3); // 안전 마진 3px (그래픽 크게 유지)
+          
+          // 사분면 방향 유지하며 위치 조정
+          finalX = circleCenterX + Math.cos(angle) * safeDistance;
+          finalY = circleCenterY + Math.sin(angle) * safeDistance;
+          console.log(`  🔄 원형 경계 조정 (사분면 방향 유지): 거리 ${centerDistance.toFixed(1)} → ${safeDistance.toFixed(1)}`);
+          
+          if (safeDistance > 0) {
+            console.log(`  ⚠️ 원형 경계 조정: ${quadrantNames[quadrantIndex]} 사분면 위치 조정 (안전 거리: ${safeDistance.toFixed(1)}px)`);
+            
+            // 조정 후 다시 확인
+            const updatedCorners = [
+              { x: finalX - halfWidth, y: finalY - halfHeight },
+              { x: finalX + halfWidth, y: finalY - halfHeight },
+              { x: finalX - halfWidth, y: finalY + halfHeight },
+              { x: finalX + halfWidth, y: finalY + halfHeight }
+            ];
+            
+            let stillOutside = false;
+            for (const corner of updatedCorners) {
+              const distanceFromCenter = Math.sqrt((corner.x - circleCenterX) ** 2 + (corner.y - circleCenterY) ** 2);
+              if (distanceFromCenter > circleRadius - 3) {
+                stillOutside = true;
+                break;
+              }
+            }
+            
+            if (stillOutside) {
+              // 그래픽 크기를 약간 줄임 (하지만 여전히 크게 유지, 최소 80% 유지)
+              const requiredHalfDiagonal = circleRadius * 0.80; // 원 반지름의 80%로 약간 줄임 (여전히 크게)
+              const scale = requiredHalfDiagonal / imageHalfDiagonal;
+              targetWidth *= scale;
+              targetHeight *= scale;
+              halfWidth = targetWidth / 2;
+              halfHeight = targetHeight / 2;
+              imageHalfDiagonal = Math.sqrt(halfWidth ** 2 + halfHeight ** 2);
+              const angle = Math.atan2(finalY - circleCenterY, finalX - circleCenterX);
+              const newSafeDistance = Math.max(0, circleRadius - imageHalfDiagonal - 3);
+              
+              // 사분면 방향 유지하며 위치 재조정
+              finalX = circleCenterX + Math.cos(angle) * newSafeDistance;
+              finalY = circleCenterY + Math.sin(angle) * newSafeDistance;
+              console.log(`  ⚠️ 그래픽 크기 강제 축소 및 위치 재조정: 크기 ${scale.toFixed(2)}배로 축소, 사분면 방향 유지`);
+            } else {
+              // 그래픽이 너무 커서 원 안에 들어갈 수 없는 경우, 원 중심에 배치
+              finalX = circleCenterX;
+              finalY = circleCenterY;
+              console.warn(`  ❌ 그래픽이 너무 커서 원 중심에 강제 배치`);
+            }
+          } else {
+            // 그래픽이 너무 커서 원 안에 들어갈 수 없는 경우, 그래픽 크기를 약간 줄임 (하지만 여전히 크게 유지, 최소 80% 유지)
+            const requiredHalfDiagonal = circleRadius * 0.80; // 원 반지름의 80%로 약간 줄임 (여전히 크게)
+            const scale = requiredHalfDiagonal / imageHalfDiagonal;
+            targetWidth *= scale;
+            targetHeight *= scale;
+            halfWidth = targetWidth / 2;
+            halfHeight = targetHeight / 2;
+            imageHalfDiagonal = Math.sqrt(halfWidth ** 2 + halfHeight ** 2);
+            const angle = Math.atan2(finalY - circleCenterY, finalX - circleCenterX);
+            const newSafeDistance = Math.max(0, circleRadius - imageHalfDiagonal - 3);
+            
+            // 사분면 방향 유지하며 위치 재조정
+            finalX = circleCenterX + Math.cos(angle) * newSafeDistance;
+            finalY = circleCenterY + Math.sin(angle) * newSafeDistance;
+            console.log(`  ⚠️ 그래픽 크기 강제 축소 및 위치 재조정: 크기 ${scale.toFixed(2)}배로 축소, 사분면 방향 유지`);
+            
+            if (newSafeDistance <= 0) {
+              finalX = circleCenterX;
+              finalY = circleCenterY;
+              console.warn(`  ❌ 그래픽이 너무 커서 원 중심에 강제 배치`);
+            }
+          }
+        }
+        
+        // 최종 확인: 모든 모서리가 원 안에 있는지 다시 한 번 확인
+        const finalCorners = [
+          { x: finalX - halfWidth, y: finalY - halfHeight },
+          { x: finalX + halfWidth, y: finalY - halfHeight },
+          { x: finalX - halfWidth, y: finalY + halfHeight },
+          { x: finalX + halfWidth, y: finalY + halfHeight }
+        ];
+        
+        let allCornersInside = true;
+        for (const corner of finalCorners) {
+          const distanceFromCenter = Math.sqrt((corner.x - circleCenterX) ** 2 + (corner.y - circleCenterY) ** 2);
+          if (distanceFromCenter > circleRadius - 3) { // 안전 마진 3px (그래픽 크게 유지)
+            allCornersInside = false;
+            break;
+          }
+        }
+        
+        // 만약 여전히 원 밖에 있으면 그래픽 크기를 약간 줄이고 위치를 원 중심 가까이로 (하지만 여전히 크게 유지)
+        if (!allCornersInside) {
+          console.warn(`  ❌ 그래픽이 여전히 원 밖에 있음. 크기와 위치 강제 조정 (사분면 방향 유지)`);
+          const requiredHalfDiagonal = circleRadius * 0.80; // 원 반지름의 80% (약간 줄임, 하지만 여전히 크게)
+          const scale = requiredHalfDiagonal / imageHalfDiagonal;
           targetWidth *= scale;
           targetHeight *= scale;
-        }
-        
-        // 경계 체크: 원형 경계를 기준으로 체크 (사각형 경계 제한 완화)
-        // 사분면 위치를 최우선으로 유지하고, 원형 경계만 체크
-        let finalX = pos.x;
-        let finalY = pos.y;
-        
-        // 원형 경계 체크: 이미지의 가장 바깥쪽 점이 원을 넘는지 체크 (간격 확보를 위해 완화)
-        const distanceFromCenter = Math.sqrt((finalX - circleCenterX) ** 2 + (finalY - circleCenterY) ** 2);
-        const circleRadius = Math.min(circleWidth, circleHeight) / 2; // 써클의 실제 반지름
-        const imageHalfDiagonal = Math.sqrt(halfWidth ** 2 + halfHeight ** 2); // 이미지 중심에서 가장 먼 점까지의 거리
-        
-        // 간격을 최대한 유지하기 위해 경계 체크 대폭 완화
-        // quadrantPositions에서 설정한 간격을 절대적으로 우선
-        const safetyMargin = 0; // 안전 마진 제거 (간격 최대화)
-        const maxAllowedDistance = circleRadius - imageHalfDiagonal - safetyMargin;
-        
-        // desiredDistance는 quadrantPositions에서 설정한 위치의 중심 거리
-        const desiredDistance = Math.sqrt((pos.x - circleCenterX) ** 2 + (pos.y - circleCenterY) ** 2);
-        
-        // 원형 경계를 넘는 경우에만 최소한으로 조정 (간격 최대한 유지)
-        // 간격을 우선하므로 더 관대하게 체크
-        if (distanceFromCenter + imageHalfDiagonal > circleRadius - 5) { // 5px 안전 여백
-          // 원형 경계를 약간 넘어도 허용하되, 너무 많이 넘으면 조정
+          halfWidth = targetWidth / 2;
+          halfHeight = targetHeight / 2;
+          imageHalfDiagonal = Math.sqrt(halfWidth ** 2 + halfHeight ** 2);
+          
+          // 사분면 방향 유지하며 위치 조정
           const angle = Math.atan2(finalY - circleCenterY, finalX - circleCenterX);
+          const safeDistance = Math.max(0, circleRadius - imageHalfDiagonal - 3); // 안전 마진 3px (그래픽 크게 유지)
           
-          // 원하는 위치를 최우선으로 하되, 원형 경계를 크게 넘지 않도록만 제한
-          const newDistanceFromCenter = Math.min(desiredDistance, maxAllowedDistance); // 여유 제거
+          // 사분면 방향 유지하며 위치 재조정
+          finalX = circleCenterX + Math.cos(angle) * safeDistance;
+          finalY = circleCenterY + Math.sin(angle) * safeDistance;
+          console.log(`  ⚠️ 그래픽 크기 및 위치 강제 조정: 크기 ${scale.toFixed(2)}배, 위치 ${safeDistance.toFixed(1)}px, 사분면 방향 유지`);
           
-          // 이미지가 너무 커서 newDistanceFromCenter가 음수가 되는 경우 방지
-          if (newDistanceFromCenter < 0) {
+          if (safeDistance <= 0) {
             finalX = circleCenterX;
             finalY = circleCenterY;
-          } else {
-            finalX = circleCenterX + Math.cos(angle) * newDistanceFromCenter;
-            finalY = circleCenterY + Math.sin(angle) * newDistanceFromCenter;
+            console.warn(`  ❌ 그래픽이 너무 커서 원 중심에 강제 배치`);
           }
         }
         
-        // 최종 경계 검증: 원형 경계만 체크 (사각형 경계 제거로 간격 확보)
-        // 원형 경계 체크는 이미 위에서 수행했으므로, 사각형 경계 체크는 제거
-        // 이렇게 하면 quadrantPositions에서 설정한 58% 간격이 제대로 적용됨
-        const finalLeft = finalX - halfWidth;
-        const finalRight = finalX + halfWidth;
-        const finalTop = finalY - halfHeight;
-        const finalBottom = finalY + halfHeight;
-        
-        // 원형 경계만 최종 확인 (이미 위에서 체크했지만 한 번 더 확인)
-        const finalDistanceFromCenter = Math.sqrt((finalX - circleCenterX) ** 2 + (finalY - circleCenterY) ** 2);
-        const finalImageHalfDiagonal = Math.sqrt(halfWidth ** 2 + halfHeight ** 2);
-        const isWithinCircle = finalDistanceFromCenter + finalImageHalfDiagonal <= circleRadius;
-        
-        if (!isWithinCircle) {
-          console.warn(`⚠️ 원형 경계 체크: 이미지가 원을 약간 넘음. 추가 조정...`);
-          // 원형 경계 내로 최소한만 조정
-          const angle = Math.atan2(finalY - circleCenterY, finalX - circleCenterX);
-          const safeDistance = circleRadius - finalImageHalfDiagonal - 3;
-          if (safeDistance > 0) {
-            finalX = circleCenterX + Math.cos(angle) * safeDistance;
-            finalY = circleCenterY + Math.sin(angle) * safeDistance;
-          }
-        }
-        
-        // 퍼센트로 변환 (finalX, finalY는 이미 ticketContent 기준 상대 좌표)
-        // circleLeft, circleTop 계산 시 이미 ticketContentRect.left/top을 빼서
-        // finalX, finalY는 이미 상대 좌표임
+        // 퍼센트로 변환
         let leftPercent = (finalX / ticketContentRect.width) * 100;
         let topPercent = (finalY / ticketContentRect.height) * 100;
         
-        console.log(`  📍 최종 위치 계산: finalX=${finalX.toFixed(1)}px, finalY=${finalY.toFixed(1)}px → left=${leftPercent.toFixed(2)}%, top=${topPercent.toFixed(2)}%`);
+        console.log(`  📍 최종 위치: ${leftPercent.toFixed(2)}%, ${topPercent.toFixed(2)}% (사분면: ${quadrantNames[quadrantIndex]})`);
+        console.log(`  크기: ${targetWidth.toFixed(1)}px × ${targetHeight.toFixed(1)}px (halfDiagonal: ${imageHalfDiagonal.toFixed(1)}px, 원 반지름의 ${(imageHalfDiagonal / circleRadius * 100).toFixed(1)}%)`);
         
         img.style.left = leftPercent + '%';
         img.style.top = topPercent + '%';
@@ -3058,51 +3360,21 @@ function showQRForDataURL(dataURL){
         img.style.height = targetHeight + 'px';
         img.style.transform = 'translate(-50%, -50%)'; // 중심 정렬
         
-        // 🔑 초기 위치를 data 속성으로 저장 (위치 초기화 기능용)
+        // 초기 위치 저장
         img.dataset.initialLeft = leftPercent + '%';
         img.dataset.initialTop = topPercent + '%';
-        img.dataset.initialPositionSet = 'true'; // 초기 위치 설정 완료 플래그
-        
-        const quadrantNames = ['NE', 'NW', 'SE', 'SW'];
-        console.log(`  사분면: ${quadrantNames[quadrantIndex]}`);
-        console.log(`  위치: ${leftPercent.toFixed(2)}%, ${topPercent.toFixed(2)}%`);
-        console.log(`  이미지 크기: ${targetWidth.toFixed(1)}px × ${targetHeight.toFixed(1)}px (right_circle 크기 비례)`);
-        console.log(`  경계 체크: ${isWithinCircle ? '✅' : '⚠️'} 원형 경계 내부, 중심 거리=${finalDistanceFromCenter.toFixed(1)}px`);
-        
-        // 최종 배치 후 실제 위치 확인 (이미지가 렌더링된 후)
-        setTimeout(() => {
-          const imgRect = img.getBoundingClientRect();
-          const imgLeft = imgRect.left - ticketContentRect.left;
-          const imgTop = imgRect.top - ticketContentRect.top;
-          const imgRight = imgLeft + imgRect.width;
-          const imgBottom = imgTop + imgRect.height;
-          
-          const actuallyWithinBounds = 
-            imgLeft >= circleLeft && 
-            imgRight <= circleRight && 
-            imgTop >= circleTop && 
-            imgBottom <= circleBottom;
-          
-          if (!actuallyWithinBounds) {
-            console.error(`❌❌❌ 경계 위반! 이미지 ${index + 1}이 실제로 right_circle를 넘습니다!`);
-            console.error(`  right_circle: left=${circleLeft.toFixed(1)}, right=${circleRight.toFixed(1)}, top=${circleTop.toFixed(1)}, bottom=${circleBottom.toFixed(1)}`);
-            console.error(`  이미지 실제 위치: left=${imgLeft.toFixed(1)}, right=${imgRight.toFixed(1)}, top=${imgTop.toFixed(1)}, bottom=${imgBottom.toFixed(1)}`);
-          } else {
-            console.log(`✅ 이미지 ${index + 1}이 right_circle 내부에 정확히 배치됨`);
-          }
-        }, 100);
+        img.dataset.initialPositionSet = 'true';
         
         // 드래그 기능 적용
         makeImageDraggable(img);
       };
       
-      // 이미지가 이미 로드되었으면 바로 실행, 아니면 로드 완료 후 실행 (한 번만 실행)
+      // 이미지 로드 완료 후 실행
       let positionUpdated = false;
       const updateOnce = () => {
         if (!positionUpdated) {
           positionUpdated = true;
           updateImagePosition();
-          // load 이벤트 리스너 제거 (한 번만 실행)
           img.removeEventListener('load', updateOnce);
         }
       };
@@ -3115,420 +3387,143 @@ function showQRForDataURL(dataURL){
     });
     
     // 악기 그래픽 일렬 배치 (오른쪽 써클 아래쪽)
-    // 먼저 모든 악기 이미지의 크기를 계산하여 저장 (충돌 체크를 위해)
-    const instrumentSizes = [];
-    instrumentImages.forEach((img, index) => {
-      const originalWidth = img.naturalWidth;
-      const originalHeight = img.naturalHeight;
-      const aspectRatio = originalHeight / originalWidth;
-      const usableReferenceSize = Math.min(usableWidth, usableHeight);
-      
-      // 악기별 크기 조정
-      const imgSrc = img.src || '';
-      const imgAlt = img.alt || '';
-      let instrumentScale = 1.0;
-      
-      if (imgSrc.includes('Cb.svg') || imgSrc.includes('/Cb.') || /콘트라베이스|콘트베이스/.test(imgAlt)) {
-        instrumentScale = 1.15;
-      } else if (imgSrc.includes('Vn.svg') || imgSrc.includes('/Vn.') || /바이올린/.test(imgAlt)) {
-        instrumentScale = 0.70;
-      } else if (imgSrc.includes('Vla.svg') || imgSrc.includes('/Vla.') || /비올라/.test(imgAlt)) {
-        instrumentScale = 0.80;
-      } else if (imgSrc.includes('Tp.svg') || imgSrc.includes('/Tp.') || /트럼펫/.test(imgAlt)) {
-        instrumentScale = 0.75;
-      } else if (imgSrc.includes('Trb.svg') || imgSrc.includes('/Trb.') || /트롬본|트럼본/.test(imgAlt)) {
-        instrumentScale = 0.75;
-      } else if (imgSrc.includes('Hn.svg') || imgSrc.includes('/Hn.') || /호른/.test(imgAlt)) {
-        instrumentScale = 0.75;
-      }
-      
-      const baseScale = img.dataset.scale ? parseFloat(img.dataset.scale) : 0.5;
-      const targetSizeRatio = baseScale * 1.50 * instrumentScale;
-      const targetSize = usableReferenceSize * targetSizeRatio;
-      
-      let targetWidth, targetHeight;
-      if (originalWidth > originalHeight) {
-        targetWidth = targetSize;
-        targetHeight = targetSize * aspectRatio;
-      } else {
-        targetHeight = targetSize;
-        targetWidth = targetSize / aspectRatio;
-      }
-      
-      // 크기 제한 적용 (간단한 버전)
-      if (targetWidth > maxImageSize || targetHeight > maxImageSize) {
-        const scaleByWidth = maxImageSize / targetWidth;
-        const scaleByHeight = maxImageSize / targetHeight;
-        const finalScale = Math.min(scaleByWidth, scaleByHeight);
-        targetWidth *= finalScale;
-        targetHeight *= finalScale;
-      }
-      
-      instrumentSizes.push({ width: targetWidth, height: targetHeight, halfWidth: targetWidth / 2, halfHeight: targetHeight / 2 });
-    });
-    
-    // 모든 악기 이미지의 위치를 먼저 순차적으로 계산 (충돌 체크를 위해)
-    const instrumentPositions = [];
-    let currentX = usableLeft + usableWidth * 0.15; // 초기 X 위치
-    const minSpacingRatio = 0.20; // 최소 간격 비율 (20%)
-    
-    instrumentImages.forEach((img, index) => {
-      const size = instrumentSizes[index];
-      const minSpacing = Math.max(size.width, size.height) * minSpacingRatio;
-      
-      // 이전 이미지가 있으면 간격 확보
-      if (index > 0) {
-        const prevSize = instrumentSizes[index - 1];
-        const prevPos = instrumentPositions[index - 1];
-        const minGap = prevSize.halfWidth + size.halfWidth + minSpacing;
-        currentX = Math.max(currentX, prevPos.x + minGap);
-      }
-      
-      instrumentPositions.push({
-        x: currentX,
-        y: baseY,
-        width: size.width,
-        height: size.height,
-        halfWidth: size.halfWidth,
-        halfHeight: size.halfHeight
-      });
-      
-      console.log(`📐 악기 ${index + 1} 위치 계산: x=${currentX.toFixed(1)}px, 크기=${size.width.toFixed(1)}x${size.height.toFixed(1)}px`);
-      
-      // 다음 이미지를 위한 X 위치 업데이트
-      currentX = currentX + size.width + minSpacing;
-    });
-    
-    // 이제 이미지들을 순차적으로 배치 (계산된 위치 사용)
     instrumentImages.forEach((img, index) => {
       console.log(`📦 악기 그래픽 ${index + 1}번째 이미지 처리:`, img.src.split('/').pop());
       
-      // 이미지가 완전히 로드될 때까지 기다린 후 크기 확인
       const updateImagePosition = () => {
-        // 드래그 중일 때는 위치 재설정하지 않음
         if (img.dataset.isDragging === 'true') {
           console.log('⏭️ 드래그 중 - 위치 재설정 건너뜀');
           return;
         }
         
-        // 초기 위치가 이미 설정되었고, 사용자가 직접 드래그한 경우 위치 재설정하지 않음
         if (img.dataset.initialPositionSet === 'true' && img.dataset.userMoved === 'true') {
           console.log('⏭️ 사용자가 직접 이동시킨 이미지 - 위치 재설정 건너뜀');
           return;
         }
-        
-        // 일렬 배치 위치 계산 (오른쪽 써클 아래쪽) - 미리 계산된 위치 사용
-        const calculatedPos = instrumentPositions[index];
-        const pos = {
-          x: calculatedPos.x,
-          y: calculatedPos.y
-        };
         
         // 원본 이미지 크기
         const originalWidth = img.naturalWidth;
         const originalHeight = img.naturalHeight;
         const aspectRatio = originalHeight / originalWidth;
         
-        // 사용 가능한 영역을 기준으로 크기 계산
-        const usableReferenceSize = Math.min(usableWidth, usableHeight);
-        
-        // 악기별 크기 조정 (콘트라베이스와 관악기는 더 작게)
+        // 악기별 크기 조정
         const imgSrc = img.src || '';
         const imgAlt = img.alt || '';
         let instrumentScale = 1.0;
         
-        // 콘트라베이스는 살짝 크게 (115%)
         if (imgSrc.includes('Cb.svg') || imgSrc.includes('/Cb.') || /콘트라베이스|콘트베이스/.test(imgAlt)) {
-          instrumentScale = 1.15;
-        }
-        // 바이올린은 작게 (70% 크기), 비올라는 약간 작게 (80% 크기)
-        else if (imgSrc.includes('Vn.svg') || imgSrc.includes('/Vn.') || /바이올린/.test(imgAlt)) {
-          instrumentScale = 0.70;
-        }
-        else if (imgSrc.includes('Vla.svg') || imgSrc.includes('/Vla.') || /비올라/.test(imgAlt)) {
-          instrumentScale = 0.80;
-        }
-        // 관악기(트럼펫, 트롬본, 호른)도 더 작게 (75% 크기)
-        else if (imgSrc.includes('Tp.svg') || imgSrc.includes('/Tp.') || /트럼펫/.test(imgAlt)) {
-          instrumentScale = 0.75;
-        }
-        else if (imgSrc.includes('Trb.svg') || imgSrc.includes('/Trb.') || /트롬본|트럼본/.test(imgAlt)) {
-          instrumentScale = 0.75;
-        }
-        else if (imgSrc.includes('Hn.svg') || imgSrc.includes('/Hn.') || /호른/.test(imgAlt)) {
-          instrumentScale = 0.75;
-        }
-        // 다른 악기는 기본 크기
-        else {
           instrumentScale = 1.0;
+        } else if (imgSrc.includes('Vn.svg') || imgSrc.includes('/Vn.') || /바이올린/.test(imgAlt)) {
+          instrumentScale = 0.85;
+        } else if (imgSrc.includes('Vla.svg') || imgSrc.includes('/Vla.') || /비올라/.test(imgAlt)) {
+          instrumentScale = 0.85;
+        } else if (imgSrc.includes('Cl.svg') || imgSrc.includes('/Cl.') || /클라리넷/.test(imgAlt)) {
+          instrumentScale = 0.75;
+        } else if (imgSrc.includes('Hn.svg') || imgSrc.includes('/Hn.') || /호른/.test(imgAlt)) {
+          instrumentScale = 0.65;
+        } else if (imgSrc.includes('Tp.svg') || imgSrc.includes('/Tp.') || /트럼펫/.test(imgAlt)) {
+          instrumentScale = 0.70;
+        } else if (imgSrc.includes('Trb.svg') || imgSrc.includes('/Trb.') || /트롬본|트럼본/.test(imgAlt)) {
+          instrumentScale = 0.70;
+        } else if (imgSrc.includes('Fl.svg') || imgSrc.includes('/Fl.') || /플룻/.test(imgAlt)) {
+          instrumentScale = 0.70;
+        } else {
+          instrumentScale = 0.75;
         }
         
-        // baseScale을 사용 가능한 영역의 직접 비율로 변환
+        // 크기 계산 (원형 경계 내에 들어가도록 적절한 크기)
+        const circleReferenceSize = Math.min(circleWidth, circleHeight);
         const baseScale = img.dataset.scale ? parseFloat(img.dataset.scale) : 0.5;
-        const targetSizeRatio = baseScale * 1.50 * instrumentScale; // 악기별 스케일 적용 (1.35→1.50)
-        const targetSize = usableReferenceSize * targetSizeRatio;
+        const instrumentBaseRatio = baseScale * 1.5; // 악기 크기 비율 (더 작게 조정)
+        const targetSizeRatio = instrumentBaseRatio * instrumentScale;
+        const targetSize = circleReferenceSize * targetSizeRatio;
         
-        // 원본 이미지 비율 유지하면서 targetSize에 맞추기
         let targetWidth, targetHeight;
         if (originalWidth > originalHeight) {
-          // 가로가 더 긴 경우
           targetWidth = targetSize;
           targetHeight = targetSize * aspectRatio;
         } else {
-          // 세로가 더 긴 경우
           targetHeight = targetSize;
           targetWidth = targetSize / aspectRatio;
         }
         
-        // 최대 크기 제한 (절대적인 제한)
-        if (targetWidth > maxImageSize || targetHeight > maxImageSize) {
-          const scaleByWidth = maxImageSize / targetWidth;
-          const scaleByHeight = maxImageSize / targetHeight;
+        // 최대 크기 제한 (악기는 일반 그래픽보다 작게)
+        const maxSize = circleReferenceSize * 0.40; // 악기는 더 작게 (40%로 축소)
+        if (targetWidth > maxSize || targetHeight > maxSize) {
+          const scaleByWidth = maxSize / targetWidth;
+          const scaleByHeight = maxSize / targetHeight;
           const finalScale = Math.min(scaleByWidth, scaleByHeight);
           targetWidth *= finalScale;
           targetHeight *= finalScale;
         }
         
-        // 반드시 사용 가능한 영역 내에 들어가도록 추가 검증
-        // 악기 그래픽은 원형 경계를 고려하여 더 보수적으로 크기 제한
         const halfWidth = targetWidth / 2;
         const halfHeight = targetHeight / 2;
+        const circleRadius = Math.min(circleWidth, circleHeight) / 2;
         
-        // 원형 경계를 고려한 최대 크기 계산 (더 보수적으로)
-        const circleRadiusX = circleWidth / 2;
-        const circleRadiusY = circleHeight / 2;
-        const safeRadiusRatio = 0.65; // 65% 안전 마진으로 매우 보수적으로 (원 경계에서 충분히 떨어진 위치)
+        // 일렬 배치 위치 계산 (일반 그래픽 하단보다 아래)
+        const numInstruments = instrumentImages.length;
+        const startX = usableLeft + usableWidth * 0.15;
+        const spacing = numInstruments > 1 ? (usableWidth * 0.7) / (numInstruments - 1) : 0;
+        const instrumentX = startX + (index * spacing);
+        const instrumentY = baseY;
         
-        // 원형 내부에 안전하게 들어갈 수 있는 최대 크기 계산
-        const maxSafeWidth = circleRadiusX * safeRadiusRatio * 2; // 가로 최대 크기
-        const maxSafeHeight = circleRadiusY * safeRadiusRatio * 2; // 세로 최대 크기
+        let finalX = instrumentX;
+        let finalY = instrumentY;
         
-        // 타겟 크기가 안전 범위를 넘으면 더 줄임
-        if (targetWidth > maxSafeWidth || targetHeight > maxSafeHeight) {
-          const scaleBySafeWidth = maxSafeWidth / targetWidth;
-          const scaleBySafeHeight = maxSafeHeight / targetHeight;
-          const safeScale = Math.min(scaleBySafeWidth, scaleBySafeHeight);
-          targetWidth *= safeScale;
-          targetHeight *= safeScale;
-        }
-        
-        // 최종 검증: 크기가 사용 가능한 영역보다 크면 더 줄임 (더 보수적으로)
-        if (targetWidth > usableWidth || targetHeight > usableHeight) {
-          const scaleByUsableWidth = usableWidth * 0.65 / targetWidth; // 65%로 매우 안전하게
-          const scaleByUsableHeight = usableHeight * 0.65 / targetHeight; // 65%로 매우 안전하게
-          const safetyScale = Math.min(scaleByUsableWidth, scaleByUsableHeight);
-          targetWidth *= safetyScale;
-          targetHeight *= safetyScale;
-        }
-        
-        // halfWidth, halfHeight 재계산 (크기 조정 후)
-        const finalHalfWidth = targetWidth / 2;
-        const finalHalfHeight = targetHeight / 2;
-        
-        // 원형 경계를 절대 넘지 않도록 엄격하게 체크 (최우선)
-        // 먼저 원형 경계 내부에 들어갈 수 있는 위치로 조정
-        let finalX = pos.x;
-        let finalY = pos.y;
-        
-        // 원형 경계 내부에 안전하게 배치되도록 엄격하게 체크 (최우선)
-        let maxIterations = 20;
-        let iteration = 0;
-        
-        // 원형 경계 체크 먼저 수행
-        while (iteration < maxIterations) {
-          const checkPoints = [
-            { x: finalX - finalHalfWidth, y: finalY - finalHalfHeight }, // 좌상단
-            { x: finalX + finalHalfWidth, y: finalY - finalHalfHeight }, // 우상단
-            { x: finalX - finalHalfWidth, y: finalY + finalHalfHeight }, // 좌하단
-            { x: finalX + finalHalfWidth, y: finalY + finalHalfHeight }  // 우하단
-          ];
-          
-          let needsAdjustment = false;
-          let adjustX = 0;
-          let adjustY = 0;
-          
-          checkPoints.forEach(point => {
-            // 타원 내부 체크: (x-cx)²/a² + (y-cy)²/b² <= 1
-            const dx = (point.x - circleCenterX) / circleRadiusX;
-            const dy = (point.y - circleCenterY) / circleRadiusY;
-            const distSquared = dx * dx + dy * dy;
-            
-            // 원 경계를 절대 넘지 않도록 엄격하게 체크 (85% 안전 마진)
-            if (distSquared > 0.85) {
-              needsAdjustment = true;
-              // 원 중심으로 이동하는 방향으로 조정
-              const angle = Math.atan2(point.y - circleCenterY, point.x - circleCenterX);
-              const maxDistX = circleRadiusX * 0.85 * Math.cos(angle);
-              const maxDistY = circleRadiusY * 0.85 * Math.sin(angle);
-              
-              // 각 모서리에 따라 이미지 중심을 조정
-              if (point === checkPoints[0] || point === checkPoints[2]) { // 좌측 모서리
-                const desiredX = circleCenterX + maxDistX + finalHalfWidth;
-                adjustX = Math.min(adjustX, (desiredX - finalX) * 0.8);
-              }
-              if (point === checkPoints[1] || point === checkPoints[3]) { // 우측 모서리
-                const desiredX = circleCenterX + maxDistX - finalHalfWidth;
-                adjustX = Math.max(adjustX, (desiredX - finalX) * 0.8);
-              }
-              if (point === checkPoints[0] || point === checkPoints[1]) { // 상단 모서리
-                const desiredY = circleCenterY + maxDistY + finalHalfHeight;
-                adjustY = Math.min(adjustY, (desiredY - finalY) * 0.8);
-              }
-              if (point === checkPoints[2] || point === checkPoints[3]) { // 하단 모서리
-                const desiredY = circleCenterY + maxDistY - finalHalfHeight;
-                adjustY = Math.max(adjustY, (desiredY - finalY) * 0.8);
-              }
-            }
-          });
-          
-          if (!needsAdjustment) break;
-          
-          finalX += adjustX;
-          finalY += adjustY;
-          iteration++;
-        }
-        
-        // 원형 경계 체크 완료 후, 원형 내부에서 충돌 체크 및 최소 간격 확보
-        const minSpacing = Math.max(targetWidth, targetHeight) * 0.12; // 간격을 20%에서 12%로 줄임
-        
-        // 앞서 배치된 악기 이미지들과 충돌 체크 (원형 경계 내부에서만)
+        // 이전 악기와의 간격 체크
         for (let i = 0; i < index; i++) {
           const prevImg = instrumentImages[i];
-          
-          let prevCenterX, prevHalfWidth;
+          if (!prevImg) continue;
           
           const prevRect = prevImg.getBoundingClientRect();
-          const ticketContentRectCurrent = ticketContent.getBoundingClientRect();
+          const prevCenterX = prevRect.left - ticketContentRect.left + prevRect.width / 2;
+          const prevHalfWidth = prevRect.width / 2;
           
-          if (prevRect.width > 0 && prevImg.style.width) {
-            prevCenterX = prevRect.left - ticketContentRectCurrent.left + prevRect.width / 2;
-            prevHalfWidth = prevRect.width / 2;
-          } else {
-            const prevPos = instrumentPositions[i];
-            const prevSize = instrumentSizes[i];
-            prevCenterX = prevPos.x;
-            prevHalfWidth = prevSize.halfWidth;
-          }
-          
-          // 가로 방향 충돌 체크 (최소 간격 확보)
-          const minHorizontalGap = finalHalfWidth + prevHalfWidth + minSpacing;
-          const horizontalDistance = finalX - prevCenterX;
-          
-          if (horizontalDistance < minHorizontalGap) {
-            const newX = prevCenterX + minHorizontalGap;
-            
-            // 새 위치가 원형 경계 내부인지 확인
-            const newLeft = newX - finalHalfWidth;
-            const newRight = newX + finalHalfWidth;
-            const newTop = finalY - finalHalfHeight;
-            const newBottom = finalY + finalHalfHeight;
-            
-            const newCheckPoints = [
-              { x: newLeft, y: newTop },
-              { x: newRight, y: newTop },
-              { x: newLeft, y: newBottom },
-              { x: newRight, y: newBottom }
-            ];
-            
-            let allPointsInside = true;
-            for (const point of newCheckPoints) {
-              const dx = (point.x - circleCenterX) / circleRadiusX;
-              const dy = (point.y - circleCenterY) / circleRadiusY;
-              const distSquared = dx * dx + dy * dy;
-              if (distSquared > 0.85) {
-                allPointsInside = false;
-                break;
-              }
-            }
-            
-            // 원형 경계 내부에 들어가면 위치 조정, 아니면 현재 위치 유지
-            if (allPointsInside) {
-              finalX = newX;
-              console.log(`  🔄 악기 ${index + 1} 위치 조정 (이전 이미지와 간격 확보, 원형 내부): ${pos.x.toFixed(1)} → ${finalX.toFixed(1)}px`);
-            } else {
-              console.log(`  ⚠️ 악기 ${index + 1} 위치 조정 취소 (원형 경계를 넘음): 현재 위치 유지`);
-            }
+          const minGap = halfWidth + prevHalfWidth + (circleReferenceSize * 0.15);
+          if (finalX - prevCenterX < minGap) {
+            finalX = prevCenterX + minGap;
           }
         }
         
-        // 최종 경계 검증 (사각형 경계도 체크)
-        const finalLeft = finalX - finalHalfWidth;
-        const finalRight = finalX + finalHalfWidth;
-        const finalTop = finalY - finalHalfHeight;
-        const finalBottom = finalY + finalHalfHeight;
+        // 원형 경계 체크
+        const distanceFromCenter = Math.sqrt((finalX - circleCenterX) ** 2 + (finalY - circleCenterY) ** 2);
+        const imageHalfDiagonal = Math.sqrt(halfWidth ** 2 + halfHeight ** 2);
         
-        // 사각형 경계 내부 확인 (원의 외접 사각형)
-        const isWithinRect = 
-          finalLeft >= circleLeft && 
-          finalRight <= circleRight && 
-          finalTop >= circleTop && 
-          finalBottom <= circleBottom;
-        
-        if (!isWithinRect) {
-          console.warn(`⚠️ 악기 이미지가 사각형 경계를 넘음, 위치 재조정`);
-          // 사각형 경계로 강제 조정 (finalHalfWidth, finalHalfHeight 사용)
-          if (finalLeft < circleLeft) finalX = circleLeft + finalHalfWidth;
-          if (finalRight > circleRight) finalX = circleRight - finalHalfWidth;
-          if (finalTop < circleTop) finalY = circleTop + finalHalfHeight;
-          if (finalBottom > circleBottom) finalY = circleBottom - finalHalfHeight;
+        if (distanceFromCenter + imageHalfDiagonal > circleRadius - 2) {
+          const angle = Math.atan2(finalY - circleCenterY, finalX - circleCenterX);
+          const safeDistance = circleRadius - imageHalfDiagonal - 2;
+          if (safeDistance > 0) {
+            finalX = circleCenterX + Math.cos(angle) * safeDistance;
+            finalY = circleCenterY + Math.sin(angle) * safeDistance;
+          }
         }
         
         // 퍼센트로 변환
-        let leftPercent = (finalX / ticketContentRect.width) * 100;
-        let topPercent = (finalY / ticketContentRect.height) * 100;
+        const leftPercent = (finalX / ticketContentRect.width) * 100;
+        const topPercent = (finalY / ticketContentRect.height) * 100;
         
-        console.log(`  📍 악기 그래픽 최종 위치 계산: finalX=${finalX.toFixed(1)}px, finalY=${finalY.toFixed(1)}px → left=${leftPercent.toFixed(2)}%, top=${topPercent.toFixed(2)}%`);
+        console.log(`  📍 악기 위치: ${leftPercent.toFixed(2)}%, ${topPercent.toFixed(2)}%`);
+        console.log(`  크기: ${targetWidth.toFixed(1)}px × ${targetHeight.toFixed(1)}px`);
         
         img.style.left = leftPercent + '%';
         img.style.top = topPercent + '%';
         img.style.width = targetWidth + 'px';
         img.style.height = targetHeight + 'px';
-        img.style.transform = 'translate(-50%, -50%)'; // 중심 정렬
+        img.style.transform = 'translate(-50%, -50%)';
         
-        // 🔑 초기 위치를 data 속성으로 저장 (위치 초기화 기능용)
         img.dataset.initialLeft = leftPercent + '%';
         img.dataset.initialTop = topPercent + '%';
-        img.dataset.initialPositionSet = 'true'; // 초기 위치 설정 완료 플래그
+        img.dataset.initialPositionSet = 'true';
         
-        console.log(`  일렬 배치: 악기 그래픽 ${index + 1}번째 이미지`);
-        console.log(`  위치: ${leftPercent.toFixed(2)}%, ${topPercent.toFixed(2)}%`);
-        console.log(`  이미지 크기: ${targetWidth.toFixed(1)}px × ${targetHeight.toFixed(1)}px (right_circle 크기 비례)`);
-        console.log(`  경계 체크: ${isWithinRect ? '✅' : '⚠️'} left=${finalLeft.toFixed(1)} ~ ${finalRight.toFixed(1)}, top=${finalTop.toFixed(1)} ~ ${finalBottom.toFixed(1)}`);
-        
-        // 최종 배치 후 실제 위치 확인 (이미지가 렌더링된 후)
-        setTimeout(() => {
-          const imgRect = img.getBoundingClientRect();
-          const imgLeft = imgRect.left - ticketContentRect.left;
-          const imgTop = imgRect.top - ticketContentRect.top;
-          const imgRight = imgLeft + imgRect.width;
-          const imgBottom = imgTop + imgRect.height;
-          
-          const actuallyWithinBounds = 
-            imgLeft >= circleLeft && 
-            imgRight <= circleRight && 
-            imgTop >= circleTop && 
-            imgBottom <= circleBottom;
-          
-          if (!actuallyWithinBounds) {
-            console.error(`❌❌❌ 경계 위반! 악기 이미지 ${index + 1}이 실제로 right_circle를 넘습니다!`);
-            console.error(`  실제 이미지 범위: ${imgLeft.toFixed(1)} ~ ${imgRight.toFixed(1)}, ${imgTop.toFixed(1)} ~ ${imgBottom.toFixed(1)}`);
-            console.error(`  right_circle 범위: ${circleLeft.toFixed(1)} ~ ${circleRight.toFixed(1)}, ${circleTop.toFixed(1)} ~ ${circleBottom.toFixed(1)}`);
-          } else {
-            console.log(`✅ 악기 이미지 ${index + 1} 경계 확인 완료: right_circle 내부에 정확히 배치됨`);
-          }
-        }, 100);
-        
-        // 드래그 기능 적용
         makeImageDraggable(img);
       };
       
-      // 이미지가 이미 로드되었으면 바로 실행, 아니면 로드 완료 후 실행 (한 번만 실행)
       let positionUpdated = false;
       const updateOnce = () => {
         if (!positionUpdated) {
           positionUpdated = true;
-        updateImagePosition();
-          // load 이벤트 리스너 제거 (한 번만 실행)
+          updateImagePosition();
           img.removeEventListener('load', updateOnce);
         }
       };
@@ -3741,7 +3736,7 @@ function showQRForDataURL(dataURL){
       
       // 🎯 원형 경계 체크: 단순하게 이미지 중심점이 원 안에 있는지 확인
       // 마진을 적절히 조정해서 드래그 범위 제공
-      const safeRadiusRatio = isInstrument ? 0.96 : 0.97; // 악기는 96%, 일반은 97% (적절한 마진)
+      const safeRadiusRatio = isInstrument ? 0.96 : 0.98; // 악기는 96%, 일반은 98% (더 넓은 드래그 범위)
       // imgDiagonalRadius를 적절히 반영
       const maxAllowedDistance = circleRadius * safeRadiusRatio - (imgDiagonalRadius * 0.7);
       
@@ -3895,7 +3890,7 @@ function showQRForDataURL(dataURL){
         const instrumentNames = ['바이올린', '비올라', '첼로', '트럼본', '트럼펫', '호른', '플룻', '클라리넷', '콘트라베이스'];
         const isInstrument = instrumentNames.includes(value);
         // 기본 scale 값 (배치 함수에서 right_circle 크기에 비례하여 조정됨)
-        const baseScale = isInstrument ? 0.40 : 0.70; // 악기: 0.40 유지, 일반: 0.65→0.70 (더 키움)
+        const baseScale = isInstrument ? 0.40 : 0.60; // 악기: 0.40 유지, 일반: 0.60 (크기 축소)
         
         // 왼쪽 이미지만 생성 (드래그 가능)
         // 크기는 배치 함수에서 right_circle 크기에 비례하여 설정됨

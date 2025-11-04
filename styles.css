@@ -1,5 +1,3 @@
-/* Sandoll 웹폰트는 HTML의 <link> 태그로 로드됩니다 */
-
 :root{
   --ink:#ebfeb3;
   --accent:#06aaba;
@@ -44,7 +42,7 @@ body{
 
 /* question moved slightly down */
 .question{position:fixed; left:5vw; top: calc(16.5vh + 4.6vw); z-index:1350; pointer-events:none; white-space:normal;}
-.q-1{display:block; font-weight:700; font-size:clamp(1.6vw,3.4vmin,3.2vw); font-family: var(--font-main); line-height:1; margin:0;} 
+.q-1{display:block; font-weight:400; font-size:clamp(1.6vw,3.4vmin,3.2vw); font-family: var(--font-main); line-height:1; margin:0;} 
 .q-2{display:block; font-weight:300; font-size:clamp(1.2vw,2.6vmin,2.2vw); opacity:.95; margin-top:0.2rem; font-family: var(--font-sub); line-height:1;} 
 .question .q-1{ line-height:1; margin:0 !important; }
 .question .q-2{ display:block; line-height:1; margin-top:0.7rem !important; }
@@ -56,7 +54,7 @@ body{
   position:absolute;
   left:0;
   top:135%;
-  width:6vw; /* 살짝 축소 */
+  width:5vw; /* 살짝 축소 */
   height:auto;
   z-index:1400;
   pointer-events:auto;
@@ -66,7 +64,7 @@ body{
   .question #btnBack,
   .question #btnBackInstrument{
     top:140%;
-    width:12vw; /* 살짝 축소 */
+    width:10vw; /* 살짝 축소 */
   }
 }
 
@@ -344,8 +342,8 @@ body{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0;
-  max-width: 63vw;
-  width: 76.5vw;
+  max-width: 53.5vw;
+  width: 65vw;
   z-index: 600;
   pointer-events: auto;
 }
@@ -353,7 +351,7 @@ body{
 .instrument-item {
   aspect-ratio: 2.5;
   background: rgba(235, 254, 179, 0.1);
-  border: 0.2vw dashed rgba(235, 254, 179, 0.3);
+  border: 0.17vw dashed rgba(235, 254, 179, 0.3);
   border-radius: 0;
   display: flex;
   align-items: center;
@@ -362,11 +360,11 @@ body{
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  min-height: 7.2vw;
+  min-height: 6.1vw;
 }
 
 .instrument-text {
-  font-size: clamp(1.0vw, 2.1vw, 1.5vw);
+  font-size: clamp(0.85vw, 1.8vw, 1.3vw);
   font-weight: 500;
   color: var(--ink);
   font-family: var(--font-sub);
@@ -390,7 +388,7 @@ body{
 .instrument-item:hover {
   border-color: var(--accent);
   background: rgba(6, 170, 186, 0.1);
-  transform: translateY(-0.2vw) scale(1.02);
+  transform: translateY(-0.17vw) scale(1.02);
 }
 
 /* 기본 호버 텍스트 이동 (개별 설정이 없는 경우) */

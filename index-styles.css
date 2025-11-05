@@ -92,16 +92,14 @@ body {
 
 .button-bg {
     position: absolute;
-    top: 50%;
-    left: -3%; /* 화살표 선 왼쪽 끝쪽으로 이동 */
-    transform: translateY(-50%);
+    /* left, top은 JavaScript로 동적 계산 */
     display: block;
     border-radius: 50%;
     background: rgba(217, 255, 240, 0.2);
     width: clamp(50px, 6%, 80px); /* 초기 원 크기 - 반응형 */
-    height: clamp(50px, 6%, 80px); /* width와 동일하여 정원 유지 */
-    aspect-ratio: 1; /* 정원 비율 보장 */
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: clamp(50px, 6%, 80px); /* 초기 높이 - 타원형을 위해 유지 */
+    /* aspect-ratio 제거 - 타원형을 위해 */
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 0;
     pointer-events: none;
     mix-blend-mode: overlay; /* 화살표 위에 올라갔을 때 밝게 표시 */
@@ -112,10 +110,10 @@ body {
 
 @keyframes nudgeRight {
     0%, 100% {
-        transform: translateY(-50%) translateX(0);
+        transform: translateX(0);
     }
     50% {
-        transform: translateY(-50%) translateX(8px); /* 오른쪽으로 살짝 밀림 */
+        transform: translateX(8px); /* 오른쪽으로 살짝 밀림 */
     }
 }
 
@@ -143,12 +141,15 @@ body {
 }
 
 .landing-next-button:hover .button-bg {
-    width: 80%; /* 화살표 끝까지 확장 (화살표 끝 약 74.2% + 여유) */
+    /* width는 JavaScript로 동적 계산하여 점선 끝까지 정확히 확장 */
     height: clamp(50px, 6%, 80px); /* 높이는 초기값 유지하여 타원형으로 늘어남 */
     border-radius: 50px; /* 늘어났을 때는 둥근 모서리 */
     background: rgba(217, 255, 240, 0.35);
     mix-blend-mode: overlay; /* 호버 시에도 오버레이 유지 */
     animation: none; /* 호버 시에는 밀리는 모션 중지 */
+    /* 전체에 살짝 블러 효과 (너무 번지지 않게, 비율 단위) */
+    filter: blur(0.4vw);
+    -webkit-filter: blur(0.4vw);
 }
 
 /* 호버 시에도 화살표 위치 변경 없음 - transform 제거하여 초기 위치 유지 */

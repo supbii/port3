@@ -1390,14 +1390,81 @@
       }
     }
     
+    // 아카이브 자동 새로고침 관리
+    let lastArchiveCount = 0;
+    let archiveUpdateCheckInterval = null;
+    let broadcastChannel = null;
+    
+    // 아카이브 새로고침 함수
+    function refreshArchive() {
+      console.log('🔄 아카이브 새로고침 시작...');
+      const archiveData = JSON.parse(localStorage.getItem(ARCHIVE_KEY) || '[]');
+      const currentCount = archiveData.length;
+      
+      // 개수가 변경되었거나, 아직 초기화되지 않은 경우 새로고침
+      if (currentCount !== lastArchiveCount || lastArchiveCount === 0) {
+        console.log(`📊 아카이브 개수 변경: ${lastArchiveCount} → ${currentCount}`);
+        lastArchiveCount = currentCount;
+        loadArchive();
+      } else {
+        console.log('📊 아카이브 개수 변경 없음, 새로고침 건너뜀');
+      }
+    }
+    
     // 페이지 로드 시 실행
     document.addEventListener('DOMContentLoaded', function() {
+      // 초기 아카이브 개수 저장
+      const initialArchiveData = JSON.parse(localStorage.getItem(ARCHIVE_KEY) || '[]');
+      lastArchiveCount = initialArchiveData.length;
+      
       loadArchive();
+      
+      // BroadcastChannel을 통한 실시간 업데이트 감지
+      try {
+        broadcastChannel = new BroadcastChannel('portato_archive');
+        broadcastChannel.onmessage = function(event) {
+          if (event.data && event.data.type === 'archive_updated') {
+            console.log('📢 아카이브 업데이트 알림 수신:', event.data);
+            // 약간의 지연을 두고 새로고침 (저장이 완료될 시간을 줌)
+            setTimeout(() => {
+              refreshArchive();
+            }, 500);
+          }
+        };
+        console.log('✅ BroadcastChannel 리스너 등록 완료');
+      } catch (channelError) {
+        console.warn('⚠️ BroadcastChannel 사용 실패, polling 방식으로 전환:', channelError);
+      }
+      
+      // storage 이벤트 감지 (다른 탭/윈도우에서 localStorage 변경 시)
+      window.addEventListener('storage', function(event) {
+        if (event.key === ARCHIVE_KEY || event.key === 'portato_archive_updated') {
+          console.log('📢 storage 이벤트 감지:', event.key);
+          // 약간의 지연을 두고 새로고침
+          setTimeout(() => {
+            refreshArchive();
+          }, 300);
+        }
+      });
+      
+      // 주기적 체크 (30초마다) - BroadcastChannel이 작동하지 않는 경우를 대비
+      archiveUpdateCheckInterval = setInterval(() => {
+        refreshArchive();
+      }, 30000); // 30초마다 체크
+      console.log('✅ 주기적 아카이브 체크 시작 (30초 간격)');
       
       // 페이지가 로드된 후 10초 뒤에 마지막으로 본 timestamp 업데이트
       // (새로운 아이템이 있고 애니메이션이 끝난 후에만 업데이트되도록 이미 위에서 처리됨)
       // 하지만 페이지를 떠날 때는 현재 최신 timestamp로 업데이트
       window.addEventListener('beforeunload', function() {
+        // 정리 작업
+        if (broadcastChannel) {
+          broadcastChannel.close();
+        }
+        if (archiveUpdateCheckInterval) {
+          clearInterval(archiveUpdateCheckInterval);
+        }
+        
         const archiveData = JSON.parse(localStorage.getItem(ARCHIVE_KEY) || '[]');
         if (archiveData.length > 0) {
           const sortedData = archiveData.sort((a, b) => b.timestamp - a.timestamp);

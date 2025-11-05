@@ -116,10 +116,73 @@ window.addEventListener('load', function() {
         }
     }
     
+    // 초기 위치 저장 변수
+    let initialCircleLeft = null;
+    let initialCircleTop = null;
+    
+    // 원 오버레이 위치 계산 및 배치 함수
+    function updateCirclePosition() {
+        const buttonBg = button.querySelector('.button-bg');
+        if (!buttonBg || !svgElement) return;
+        
+        // SVG의 실제 크기와 viewBox 정보
+        const svgRect = svgElement.getBoundingClientRect();
+        const svgViewBox = svgElement.viewBox.baseVal;
+        const svgWidth = svgRect.width;
+        const svgHeight = svgRect.height;
+        const viewBoxWidth = svgViewBox.width || 1057;
+        const viewBoxHeight = svgViewBox.height || 78;
+        
+        // 점선의 시작점 (viewBox 좌표)
+        const lineStartX = 2; // x1
+        const lineY = 69.978; // y1
+        
+        // viewBox 좌표를 실제 픽셀 좌표로 변환
+        const scaleX = svgWidth / viewBoxWidth;
+        const scaleY = svgHeight / viewBoxHeight;
+        const actualLineX = lineStartX * scaleX;
+        const actualLineY = lineY * scaleY;
+        
+        // SVG의 translateX(-10px)를 고려
+        const svgTranslateX = -10;
+        
+        // 원의 중심을 점선의 시작점에 맞춤
+        // 초기 크기로 계산 (호버 시 크기가 변경되더라도 초기 위치 기준으로)
+        const initialWidth = 60; // 초기 원 크기 (clamp(50px, 6%, 80px)의 대략값)
+        const initialHeight = 60;
+        const circleRadiusX = initialWidth / 2;
+        const circleRadiusY = initialHeight / 2;
+        
+        // SVG의 실제 위치를 고려 (arrow-wrapper 내부 기준)
+        const circleLeft = actualLineX + svgTranslateX - circleRadiusX;
+        const circleTop = actualLineY - circleRadiusY;
+        
+        // 초기 위치 저장 (한 번만 저장)
+        if (initialCircleLeft === null) {
+            initialCircleLeft = circleLeft;
+            initialCircleTop = circleTop;
+        }
+        
+        buttonBg.style.left = circleLeft + 'px';
+        buttonBg.style.top = circleTop + 'px';
+        buttonBg.style.transform = 'translateX(0)'; // nudgeRight 애니메이션을 위해 translateX만 허용
+    }
+    
+    // 초기 위치 설정 및 리사이즈 시 업데이트
+    updateCirclePosition();
+    window.addEventListener('resize', function() {
+        initialCircleLeft = null; // 리사이즈 시 초기 위치 재계산
+        initialCircleTop = null;
+        updateCirclePosition();
+    });
+    
     let timers = [];
     let pulseAnimationId = null;
     
     button.addEventListener('mouseenter', function() {
+        // 원 위치 업데이트
+        updateCirclePosition();
+        
         // SVG 위치 고정 확인 및 강제 설정
         if (svgElement) {
             svgElement.style.setProperty('transform', 'translateX(-10px)', 'important');
@@ -131,6 +194,57 @@ window.addEventListener('load', function() {
             arrowWrapper.style.setProperty('transform', 'translateX(80px)', 'important');
             // transition도 제거하여 애니메이션 방지
             arrowWrapper.style.setProperty('transition', 'none', 'important');
+        }
+        
+        // 원의 타원형 확장을 위한 길이 계산
+        const buttonBg = button.querySelector('.button-bg');
+        if (buttonBg && initialCircleLeft !== null) {
+            const svgViewBox = svgElement.viewBox.baseVal;
+            const svgRect = svgElement.getBoundingClientRect();
+            const viewBoxWidth = svgViewBox.width || 1057;
+            const scaleX = svgRect.width / viewBoxWidth;
+            
+            // 점선의 시작점과 끝점 (viewBox 기준)
+            const lineStartX = 2; // x1
+            const lineEndX = 730; // x2 (점선 끝)
+            
+            // 화살표 길이 계산
+            // 화살표는 974부터 시작해서 1050.94까지
+            // 하지만 arrow-main이 scaleX(0.75)로 축소되어 있음
+            const arrowStartX = 974; // 화살표 시작점 (viewBox 기준)
+            const arrowEndX = 1050.94; // 화살표 끝점 (viewBox 기준, scaleX 적용 전)
+            const arrowScaleX = 0.75; // arrow-main의 scaleX 값
+            
+            // 화살표의 실제 길이 (scaleX 적용 후)
+            const arrowLength = (arrowEndX - arrowStartX) * arrowScaleX;
+            
+            // 점선의 길이 (viewBox 기준)
+            const lineLength = lineEndX - lineStartX;
+            
+            // 점선 끝에서 화살표 길이만큼 추가
+            const totalLength = lineLength + arrowLength;
+            
+            // viewBox 좌표를 실제 픽셀 좌표로 변환
+            const actualLineStartX = lineStartX * scaleX;
+            const actualTotalLength = totalLength * scaleX;
+            
+            // 초기 위치 유지 (위치는 변경하지 않음)
+            buttonBg.style.left = initialCircleLeft + 'px';
+            buttonBg.style.top = initialCircleTop + 'px';
+            
+            // 타원형 확장: 원의 중심(점선 시작점)부터 점선 끝 + 화살표 길이까지
+            // 원의 중심이 점선 시작점에 있으므로, 전체 길이에서 반지름을 빼면 됨
+            const initialRadius = 30; // 초기 반지름
+            // 비율 단위로 추가 여유 공간 (화면 너비의 약 1.5% 정도)
+            const extraPaddingVw = 3; // vw 단위
+            const extraPadding = (extraPaddingVw / 100) * window.innerWidth;
+            const targetWidth = actualTotalLength - initialRadius + extraPadding; // 원의 왼쪽 끝부터 끝까지의 길이
+            
+            // 호버 시 타원형으로 확장 (높이는 유지)
+            const currentHeight = getComputedStyle(buttonBg).height;
+            buttonBg.style.width = targetWidth + 'px';
+            buttonBg.style.height = currentHeight; // 높이는 유지 (타원형)
+            buttonBg.style.borderRadius = '50px';
         }
         
         // 기존 타이머 및 애니메이션 클리어
@@ -334,6 +448,24 @@ window.addEventListener('load', function() {
         if (arrowWrapper) {
             arrowWrapper.style.setProperty('transform', 'translateX(80px)', 'important');
             arrowWrapper.style.setProperty('transition', 'none', 'important');
+        }
+        
+        // 원 위치 복원 (초기 위치로 정확히 복원)
+        const buttonBg = button.querySelector('.button-bg');
+        if (buttonBg) {
+            // 모든 스타일 초기화
+            buttonBg.style.width = '';
+            buttonBg.style.height = '';
+            buttonBg.style.borderRadius = '';
+            
+            // 초기 위치로 정확히 복원
+            if (initialCircleLeft !== null && initialCircleTop !== null) {
+                buttonBg.style.left = initialCircleLeft + 'px';
+                buttonBg.style.top = initialCircleTop + 'px';
+            } else {
+                // 초기 위치가 없으면 재계산
+                updateCirclePosition();
+            }
         }
         
         if (arrowMain) {

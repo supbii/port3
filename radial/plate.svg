@@ -1,0 +1,18 @@
+<svg width="674" height="674" viewBox="0 0 674 674" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="337" cy="337" r="336" fill="#336E74" stroke="white" stroke-dasharray="6 6"/>
+<g style="mix-blend-mode:luminosity">
+<circle cx="337" cy="337" r="336" stroke="white" stroke-dasharray="6 6"/>
+</g>
+<rect x="327" y="13" width="19" height="19" fill="#EBFEB3"/>
+<rect x="327" y="642" width="19" height="19" fill="#EBFEB3"/>
+<rect x="642" y="328" width="19" height="19" fill="#EBFEB3"/>
+<rect x="13" y="328" width="19" height="19" fill="#EBFEB3"/>
+<path d="M113 337H239.5" stroke="#EBFEB3" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M434 337H560.5" stroke="#EBFEB3" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M337 113V239.5" stroke="#EBFEB3" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M337 434V560.5" stroke="#EBFEB3" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M113 337H239.5" stroke="#EBFEB3" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M434 337H560.5" stroke="#EBFEB3" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M337 113V239.5" stroke="#EBFEB3" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M337 434V560.5" stroke="#EBFEB3" stroke-width="2" stroke-dasharray="6 6"/>
+</svg>

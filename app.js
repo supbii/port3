@@ -20,9 +20,66 @@
   let soundStartTime = null;
   let volumeFadeInterval = null;
   let currentPlayingPlace = null; // 현재 재생 중인 장소 선택지 (호버용)
+  let audioContextUnlocked = false; // 오디오 컨텍스트 활성화 여부
+  let silentAudio = null; // 사일런트 오디오 (컨텍스트 활성화용)
   const FADE_DURATION = 30000; // 30초 동안 볼륨 감소
   const INITIAL_VOLUME = 0.5; // 초기 볼륨 (0-1)
   const MIN_VOLUME = 0.05; // 최소 볼륨
+
+  // 오디오 컨텍스트 활성화 (사용자 상호작용 필요)
+  function unlockAudioContext() {
+    if (audioContextUnlocked) return Promise.resolve();
+    
+    return new Promise((resolve) => {
+      // 실제 오디오 파일 중 하나를 사용하여 오디오 컨텍스트 활성화
+      // 첫 번째 오디오 파일을 미리 로드하고 재생/정지하여 컨텍스트 활성화
+      try {
+        const firstAudioPath = Object.values(PLACE_SOUNDS)[0]; // 첫 번째 오디오 파일
+        if (!firstAudioPath) {
+          resolve();
+          return;
+        }
+        
+        silentAudio = new Audio(firstAudioPath);
+        silentAudio.volume = 0; // 무음으로 설정
+        silentAudio.loop = false;
+        
+        // 오디오 로드 완료 후 재생/정지
+        silentAudio.addEventListener('loadeddata', () => {
+          const playPromise = silentAudio.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              // 즉시 정지 (사일런트 재생으로 컨텍스트만 활성화)
+              setTimeout(() => {
+                silentAudio.pause();
+                silentAudio.currentTime = 0;
+                audioContextUnlocked = true;
+                console.log('✅ 오디오 컨텍스트 활성화 완료');
+                resolve();
+              }, 10);
+            }).catch((error) => {
+              console.warn('⚠️ 오디오 컨텍스트 활성화 실패, 사용자 상호작용 대기:', error);
+              // 재생 실패해도 계속 진행 (사용자 상호작용 후 재시도)
+              resolve();
+            });
+          } else {
+            resolve();
+          }
+        }, { once: true });
+        
+        silentAudio.addEventListener('error', () => {
+          console.warn('⚠️ 오디오 파일 로드 실패');
+          resolve();
+        }, { once: true });
+        
+        // 오디오 로드 시작
+        silentAudio.load();
+      } catch (e) {
+        console.warn('오디오 컨텍스트 활성화 중 오류:', e);
+        resolve();
+      }
+    });
+  }
 
   // 장소 선택지 호버 시 사운드 재생
   function playPlaceSound(placeValue) {
@@ -40,29 +97,42 @@
     // 기존 사운드 완전히 중지
     stopPlaceSoundForHover();
 
-    // 새로운 사운드 재생
-    try {
-      currentSoundAudio = new Audio(audioPath);
-      currentSoundAudio.loop = true;
-      currentSoundAudio.volume = INITIAL_VOLUME;
-      currentPlayingPlace = placeValue;
-      
-      // 재생 시도 (사용자 상호작용이 필요한 경우를 대비)
-      const playPromise = currentSoundAudio.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          console.log('🎵 호버 사운드 재생:', placeValue);
-        }).catch(error => {
-          console.warn('사운드 자동 재생 실패 (사용자 상호작용 필요):', error);
-          currentSoundAudio = null;
-          currentPlayingPlace = null;
-        });
+    // 오디오 컨텍스트 활성화 후 재생
+    unlockAudioContext().then(() => {
+      // 새로운 사운드 재생
+      try {
+        currentSoundAudio = new Audio(audioPath);
+        currentSoundAudio.loop = true;
+        currentSoundAudio.volume = INITIAL_VOLUME;
+        currentPlayingPlace = placeValue;
+        
+        // 재생 시도
+        const playPromise = currentSoundAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            console.log('🎵 호버 사운드 재생:', placeValue);
+          }).catch(error => {
+            console.warn('사운드 재생 실패:', error);
+            // 재생 실패 시 오디오 컨텍스트 재활성화 시도
+            audioContextUnlocked = false;
+            unlockAudioContext().then(() => {
+              // 재시도
+              const retryPromise = currentSoundAudio.play();
+              if (retryPromise !== undefined) {
+                retryPromise.catch(() => {
+                  currentSoundAudio = null;
+                  currentPlayingPlace = null;
+                });
+              }
+            });
+          });
+        }
+      } catch (e) {
+        console.error('사운드 로드 실패:', e);
+        currentSoundAudio = null;
+        currentPlayingPlace = null;
       }
-    } catch (e) {
-      console.error('사운드 로드 실패:', e);
-      currentSoundAudio = null;
-      currentPlayingPlace = null;
-    }
+    });
   }
 
   // 선택 후 사운드 계속 재생 (시간에 따라 볼륨 감소)
@@ -84,28 +154,44 @@
       currentSoundAudio = null;
     }
 
-    // 선택 후 사운드 재생 시작
-    try {
-      currentSoundAudio = new Audio(audioPath);
-      currentSoundAudio.loop = true;
-      currentSoundAudio.volume = INITIAL_VOLUME;
-      
-      // 재생 시도
-      const playPromise = currentSoundAudio.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          console.log('🎵 선택 후 사운드 재생 시작:', placeValue);
-          soundStartTime = Date.now();
-          startVolumeFade();
-        }).catch(error => {
-          console.warn('사운드 재생 실패 (사용자 상호작용 필요):', error);
-          currentSoundAudio = null;
-        });
+    // 오디오 컨텍스트 활성화 후 재생
+    unlockAudioContext().then(() => {
+      // 선택 후 사운드 재생 시작
+      try {
+        currentSoundAudio = new Audio(audioPath);
+        currentSoundAudio.loop = true;
+        currentSoundAudio.volume = INITIAL_VOLUME;
+        
+        // 재생 시도
+        const playPromise = currentSoundAudio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            console.log('🎵 선택 후 사운드 재생 시작:', placeValue);
+            soundStartTime = Date.now();
+            startVolumeFade();
+          }).catch(error => {
+            console.warn('사운드 재생 실패:', error);
+            // 재생 실패 시 오디오 컨텍스트 재활성화 시도
+            audioContextUnlocked = false;
+            unlockAudioContext().then(() => {
+              // 재시도
+              const retryPromise = currentSoundAudio.play();
+              if (retryPromise !== undefined) {
+                retryPromise.then(() => {
+                  soundStartTime = Date.now();
+                  startVolumeFade();
+                }).catch(() => {
+                  currentSoundAudio = null;
+                });
+              }
+            });
+          });
+        }
+      } catch (e) {
+        console.error('사운드 로드 실패:', e);
+        currentSoundAudio = null;
       }
-    } catch (e) {
-      console.error('사운드 로드 실패:', e);
-      currentSoundAudio = null;
-    }
+    });
   }
 
   // 볼륨 페이드 아웃 시작
@@ -1124,6 +1210,22 @@ function renderStep() {
 
   layoutAll();
 }
+
+  // 사용자 상호작용 이벤트로 오디오 컨텍스트 활성화
+  const unlockAudioOnInteraction = () => {
+    if (!audioContextUnlocked) {
+      unlockAudioContext();
+    }
+  };
+
+  // 모든 사용자 상호작용 이벤트에서 오디오 컨텍스트 활성화 시도
+  const interactionEvents = ['mousedown', 'mouseup', 'mousemove', 'touchstart', 'touchend', 'touchmove', 'click', 'keydown', 'pointerdown', 'pointerup', 'pointermove'];
+  interactionEvents.forEach(eventType => {
+    document.addEventListener(eventType, unlockAudioOnInteraction, { once: true, passive: true });
+  });
+  
+  // 포인터 이벤트도 추가 (호버 시 즉시 활성화)
+  document.addEventListener('pointerover', unlockAudioOnInteraction, { once: true, passive: true });
 
   // initial render + responsive
   window.addEventListener('load', ()=> { renderStep(); });

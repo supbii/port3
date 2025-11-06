@@ -49,15 +49,44 @@ window.addEventListener('load', function() {
     // 로고 컨테이너 위치 고정 (애니메이션 완료 후)
     const logoContainer = document.querySelector('.landing-logo-container');
     if (logoContainer) {
+        // 초기 위치도 즉시 설정 (애니메이션 대기 시간 동안도 고정)
+        logoContainer.style.transform = 'translate(-50%, -50%)';
+        // opacity는 애니메이션에 맡기되, visibility는 항상 visible로 유지
+        logoContainer.style.visibility = 'visible';
+        
         // 애니메이션 완료 후 위치를 절대 고정
         logoContainer.addEventListener('animationend', function() {
             logoContainer.style.transform = 'translate(-50%, -50%)';
             logoContainer.style.animation = 'none'; // 애니메이션 재실행 방지
             logoContainer.style.willChange = 'auto'; // 최적화 해제
+            logoContainer.style.opacity = '1'; // 애니메이션 완료 후에도 확실히 보이도록
+            logoContainer.style.visibility = 'visible';
         }, { once: true });
         
-        // 초기 위치도 즉시 설정 (애니메이션 대기 시간 동안도 고정)
-        logoContainer.style.transform = 'translate(-50%, -50%)';
+        // 애니메이션 완료 후에도 로고가 보이는지 주기적으로 확인 (안전장치)
+        // 애니메이션 delay(0.5s) + duration(1.5s) = 2s 후부터 체크 시작
+        const animationDuration = 2000; // 2초
+        const logoCheckInterval = setInterval(() => {
+            if (logoContainer) {
+                const computedStyle = window.getComputedStyle(logoContainer);
+                // opacity가 0이거나 visibility가 hidden이면 복구
+                if (parseFloat(computedStyle.opacity) === 0 || computedStyle.visibility === 'hidden') {
+                    logoContainer.style.opacity = '1';
+                    logoContainer.style.visibility = 'visible';
+                    console.log('⚠️ 로고가 사라진 것을 감지하고 복구했습니다.');
+                }
+            }
+        }, 300); // 300ms마다 체크
+        
+        // 10초 후 체크 중지 (충분한 시간 확보)
+        setTimeout(() => {
+            clearInterval(logoCheckInterval);
+            // 최종 확인 및 보장
+            if (logoContainer) {
+                logoContainer.style.opacity = '1';
+                logoContainer.style.visibility = 'visible';
+            }
+        }, 10000);
     }
     
     const button = document.querySelector('.landing-next-button');

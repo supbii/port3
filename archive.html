@@ -875,9 +875,10 @@
           const randomY = padding + Math.random() * (maxY * (1 - yBias * 0.3)); // 위쪽에 더 많이 배치
           
           // 첫 번째 아이템(가장 최신)이 새로운 아이템인 경우 애니메이션 추가
-          if (index === 0 && hasNewItems) {
+          const isNewItem = index === 0 && hasNewItems;
+          if (isNewItem) {
             itemEl.classList.add('new-item');
-            console.log('✨ 새로운 아이템 감지! 반짝임 애니메이션 적용');
+            console.log('✨ 새로운 아이템 감지! 반짝임 애니메이션 및 떨어지는 모션 적용');
             
             // 10초 후 애니메이션 제거
             setTimeout(() => {
@@ -908,8 +909,17 @@
           itemEl.style.animationDelay = `${animationDelay}s`;
           itemEl.style.animationDuration = `${animationDuration}s`;
           
+          // 새로운 아이템은 하늘에서 떨어지도록 초기 위치 설정
+          let initialX = randomX;
+          let initialY = randomY;
+          if (isNewItem) {
+            // 하늘에서 시작 (화면 위쪽, 약간의 랜덤 x 위치)
+            initialX = padding + Math.random() * maxX;
+            initialY = -itemSize - 50; // 화면 위쪽 밖에서 시작
+          }
+          
           // 초기 위치를 transform으로 설정 (left/top 대신)
-          itemEl.style.transform = `translate3d(${randomX}px, ${randomY}px, 0) rotate(${randomRotate}deg)`;
+          itemEl.style.transform = `translate3d(${initialX}px, ${initialY}px, 0) rotate(${randomRotate}deg)`;
           itemEl.style.left = '0';
           itemEl.style.top = '0';
           
@@ -922,19 +932,32 @@
             initialActivity = Math.max(0, 1 - (ageInSeconds - 600) / 600); // 10분 후부터 감소, 20분에 0
           }
           
+          // 새로운 아이템은 떨어지는 모션을 위해 초기 속도 조정
+          let initialVx = (Math.random() - 0.5) * 1.8 * initialActivity;
+          let initialVy = (Math.random() - 0.5) * 1.8 * initialActivity;
+          
+          if (isNewItem) {
+            // 하늘에서 떨어지는 모션: 더 역동적인 떨어지는 효과
+            initialVx = (Math.random() - 0.5) * 1.2; // 수평은 약간의 흔들림
+            initialVy = 4.5 + Math.random() * 2.5; // 아래 방향으로 4.5~7.0 속도 (더 빠르게)
+            // 떨어지는 동안 회전 효과를 위해 초기 회전 속도 추가
+            itemEl.style.setProperty('--fall-rotation', `${(Math.random() - 0.5) * 30}deg`);
+          }
+          
           const itemData = {
             element: itemEl,
-            x: randomX,
-            y: randomY,
+            x: initialX,
+            y: initialY,
             rotate: randomRotate,
-            vx: (Math.random() - 0.5) * 1.8 * initialActivity, // 초기 속도 증가 (0.8 → 1.8)
-            vy: (Math.random() - 0.5) * 1.8 * initialActivity,
+            vx: initialVx,
+            vy: initialVy,
             radius: itemSize / 2,
             bounceTime: 0, // 튕김 효과 지속 시간
             bounceForce: { x: 0, y: 0 }, // 튕김 힘
             isHovered: false, // hover 상태
             birthTime: birthTime, // 생성 시점
-            age: ageInSeconds // 아이템의 실제 나이 (초)
+            age: ageInSeconds, // 아이템의 실제 나이 (초)
+            isNewItem: isNewItem // 새로운 아이템 플래그
           };
           
           // hover 이벤트 리스너
@@ -1262,14 +1285,23 @@
           }
           
           // 중력 효과 (활동성이 낮을수록 더 강하게, 시간이 지날수록 더 강해짐)
-          if (activity < 0.7) {
+          // 새로운 아이템은 떨어지는 동안 더 강한 중력 적용
+          if (item.isNewItem && item.y < 0) {
+            // 화면 위쪽에 있을 때는 더 강한 중력으로 빠르게 떨어뜨림
+            item.vy += 0.15; // 매우 강한 중력
+          } else if (activity < 0.7) {
             // 활동성이 낮을수록, 시간이 지날수록 중력 강화
             const gravityStrength = 0.03 + (1 - activity) * 0.05; // 더 강한 중력
             item.vy += gravityStrength; // 아래로 떨어짐
           }
           
           // 속도 제한 (활동성에 비례)
-          const maxSpeed = 1.2 * activity + 0.3; // 활동성이 낮을수록 최대 속도 감소 (0.5 → 1.2, 더 빠르게)
+          // 새로운 아이템이 떨어지는 동안은 속도 제한을 완화
+          let maxSpeed = 1.2 * activity + 0.3; // 활동성이 낮을수록 최대 속도 감소 (0.5 → 1.2, 더 빠르게)
+          if (item.isNewItem && item.y < window.innerHeight * 0.3) {
+            // 화면 상단 30% 영역에 있을 때는 속도 제한 완화 (더 빠르게 떨어짐)
+            maxSpeed = 8.0; // 떨어지는 동안은 더 빠른 속도 허용
+          }
           item.vx = Math.max(-maxSpeed, Math.min(maxSpeed, item.vx));
           item.vy = Math.max(-maxSpeed, Math.min(maxSpeed, item.vy));
           
@@ -1394,17 +1426,30 @@
           
           // CSS transform 업데이트 (물리 시뮬레이션 + 회전)
           // translateZ(0)을 사용하여 GPU 가속 활용
+          // 새로운 아이템이 떨어지는 동안은 회전 효과 추가
+          let rotation = item.rotate;
+          if (item.isNewItem && item.y < window.innerHeight * 0.5) {
+            // 떨어지는 동안 회전 효과 (속도에 비례)
+            const fallRotationSpeed = item.vy * 0.8; // 떨어지는 속도에 비례한 회전
+            rotation += fallRotationSpeed;
+          }
+          
           if (item.isHovered) {
             // hover 시 scale 적용 및 약간 위로
-            item.element.style.transform = `translate3d(${item.x}px, ${item.y - 15}px, 0) rotate(${item.rotate}deg) scale(1.15)`;
+            item.element.style.transform = `translate3d(${item.x}px, ${item.y - 15}px, 0) rotate(${rotation}deg) scale(1.15)`;
           } else {
-            item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0) rotate(${item.rotate}deg)`;
+            item.element.style.transform = `translate3d(${item.x}px, ${item.y}px, 0) rotate(${rotation}deg)`;
           }
           item.element.style.willChange = 'transform';
           
           // 회전도 살짝 변동 (튕김 시 추가 회전)
           if (item.bounceTime > 0) {
             item.rotate += (Math.random() - 0.5) * 2;
+          }
+          
+          // 새로운 아이템의 회전 업데이트
+          if (item.isNewItem && item.y < window.innerHeight * 0.5) {
+            item.rotate = rotation;
           }
           
           // 속도 감소 (마찰) - 활동성에 비례하여 감소

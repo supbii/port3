@@ -2065,13 +2065,32 @@ btnUseTicket.addEventListener('click', async ()=> {
       archive = []; 
     }
     
+    // 이미지 데이터 URL 유효성 검사
+    let validRightCircleImage = null;
+    if (rightCircleImageDataURL) {
+      // 데이터 URL 형식 확인 (data:image로 시작하는지)
+      if (rightCircleImageDataURL.startsWith('data:image/')) {
+        // 최소 길이 확인 (너무 짧으면 잘린 것)
+        if (rightCircleImageDataURL.length > 100) {
+          validRightCircleImage = rightCircleImageDataURL;
+          console.log(`✅ 이미지 데이터 URL 유효성 확인: ${(rightCircleImageDataURL.length / 1024).toFixed(2)}KB`);
+        } else {
+          console.warn('⚠️ 이미지 데이터 URL이 너무 짧습니다 (잘린 가능성):', rightCircleImageDataURL.length);
+        }
+      } else {
+        console.warn('⚠️ 이미지 데이터 URL 형식이 올바르지 않습니다:', rightCircleImageDataURL.substring(0, 50));
+      }
+    } else {
+      console.warn('⚠️ rightCircleImageDataURL이 없습니다.');
+    }
+    
     const entry = { 
       id: `ticket_${Date.now()}`, 
       timestamp: Date.now(),
       imagePositions: imagePositions, // 하위 호환성을 위해 유지
       selections: selections || {},
-      // right_circle 영역을 캡쳐한 이미지 데이터 URL 저장
-      rightCircleImage: rightCircleImageDataURL
+      // right_circle 영역을 캡쳐한 이미지 데이터 URL 저장 (유효한 경우만)
+      rightCircleImage: validRightCircleImage
     };
     
     // 새 항목 크기 예측
@@ -2084,8 +2103,27 @@ btnUseTicket.addEventListener('click', async ()=> {
     
     // 저장 시도
     try {
-      localStorage.setItem(ARCHIVE_KEY, JSON.stringify(archive));
+      const archiveString = JSON.stringify(archive);
+      // 저장 전에 문자열 길이 확인
+      const archiveSize = new Blob([archiveString]).size;
+      console.log(`📊 아카이브 저장 시도: ${(archiveSize / 1024 / 1024).toFixed(2)}MB`);
+      
+      localStorage.setItem(ARCHIVE_KEY, archiveString);
       console.log('✅ 아카이브에 저장 완료:', entry.id);
+      
+      // 저장 후 검증
+      const savedArchive = JSON.parse(localStorage.getItem(ARCHIVE_KEY) || '[]');
+      const savedEntry = savedArchive.find(e => e.id === entry.id);
+      if (savedEntry && savedEntry.rightCircleImage && entry.rightCircleImage) {
+        if (savedEntry.rightCircleImage.length === entry.rightCircleImage.length) {
+          console.log('✅ 저장된 이미지 데이터 검증 완료');
+        } else {
+          console.warn('⚠️ 저장된 이미지 데이터가 잘렸을 수 있습니다:', {
+            원본: entry.rightCircleImage.length,
+            저장됨: savedEntry.rightCircleImage.length
+          });
+        }
+      }
     } catch (storageError) {
       // 저장 실패 시 (용량 초과) 더 많은 이미지 압축
       console.warn('⚠️ 저장 실패, 추가 압축 시도...', storageError);
